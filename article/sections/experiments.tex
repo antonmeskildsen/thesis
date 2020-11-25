@@ -1,0 +1,53 @@
+\section{Experiments}
+This work focuses on a detailed analysis of the effect the proposed obfuscation methods have on the concurrent goals of iris obfuscation and gaze estimation over a wide range of parameter values. Because iris recognition performance is computationally expensive, the analysis is divided into two separate experiments, one for providing detailed information on the effect of obfuscation for a large number of parameter configurations, and one for providing complete ...
+
+
+
+The proposed methods have been extensively evaluated on a number of relevant metrics and datasets (which ones?)...... The results provide a clear image of the effectiveness of the individual methods and provide us with enough detail to help us understand how they affect gaze estimation and iris recognition.
+
+Two experiments have been performed, (1) a systematic search of filter parameters and their influence on utility, security, mutual information, and other metrics, and (2) test of iris recognition performance on the full dataset + maybe some additional gaze tests?
+
+
+For the experiments we used different datasources for gaze estimation and iris recognition in order to provide favourable conditions for iris recognition. The dataset used for iris recognition, CASIA IV, is generally considered easy for iris recognition, which is good in this case since it is exactly the opposite when the goal is to prevent correct recognition.
+
+
+\subsection{Eye tracker setup}
+
+
+
+The gaze dataset was recorded using a remote camera placed close to the eye to simulate the location on head-mounted eye trackers. A chin rest was used for keeping the head stable during recording. The participants were asked to fixate on a number of targets on a screen placed approximately 60cm from their head. A single infrared LED provides a glint used for normalisation. A set of 25 calibration images and 50 test images were recorded for each participant, with the calibration samples being placed in a regular grid and the test images being sampled from random uniform distributions.
+
+
+
+\paragraph{Gaze estimation}
+
+The gaze model used is a 2nd degree polynomial using a pupil-glint vector as its normalised input. The method requires detection of the pupil which is done by the DeepEye network (REF) and detection of the glint which is done using image thresholding and BLOB detection. 
+
+\subsection{Iris recognition}
+
+For iris recognition, we made an iris recognition algorithm that models Daugman's method as closely as possible, i.e. it uses a quantisation of phase over the iris region as the identifying code. The \emph{hamming distance} between codes is used to model distributions for matches and non-matches respectively, which are finally used to select a threshold used to determine, whether a comparison should be accepted or discarded. As in Daugman's articles, the complex 2d Gabor function is used as a bandpass filter. Phase quantisation is applied to the result to produce two bits of iris code for each Gabor application location. We ended up using 4 scales and 6 angles per scale. Since gabor filters do not have an orthogonal basis, these filter banks are selected empirically. 
+
+Base iris recognition performance is shown in (FIGREF) and is acceptable compared to other similar algorithms. 
+Without obfuscation, the algorithm performs favourably compared to many other iris recognition algorithms (refs) and is within a few orders of magnitude of the original. Larger datasets and a direct comparison would be needed to accurately determine the real-world performance. 
+
+However, the process of determining iris recognition performance on a given dataset requires many samples to produce reliable results. Specifically, given $n$ comparisons of different source irises and $m$ comparisons of equal irises, the false acceptance rate can only be determined in increments of $1/n$ and the false rejection in increments of $1/m$. Assuming the distributions approximate normal distributions (Daugman REF), their means and variance estimators have variance $Var(\bar{X})=\sigma^2/n$ and $Var(S_n)=\sigma^4/(n-1)$ respectively .... and so on...
+
+We therefore choose to only perform actual iris recognition for a few select parameters for each filter. The iris recognition comparison uses the CASIA IV dataset (REF). A subset of $2,600$ images which have been manually segmented are used (REF). This removes any influence an iris detection mechanism might have and thus provides optimal conditions for effective iris recognition. Additionally, the dataset itself is relatively easy, which purposefully makes obfuscation as difficult as possible and thus should increase our trust in the results.
+
+
+
+
+
+\subsection{Parameter experiment}
+A grid-search was performed for each obfuscation method with linearly spaced parameter values. For each parameter configuration a selected number of metrics were evaluated on samples drawn from the respective iris, gaze, and pupil-centre datasets using the obfuscation and transformed using the relevant obfuscation method. Searching the parameter space in this systematic manner has the advantage of presenting us with a more complete picture of how the various metrics react to parameter changes over the whole spectrum of possible values. Parameter configurations and precise metric descriptions are found in appendix??. 
+
+Importantly, the random sampling makes the results stochastic as well, which is why these results are not used for evaluation directly. This necessary trade-off allows a significant increase in the number of parameter values tested which provides insight into how the different methods work and compare.
+
+\subsection{Evaluation experiment}
+The evaluation experiment tests iris recognition performance on the complete set of $2,600$ iris images. This results in $xx$ possible code comparisons for each test. Two testing methodologies are used for evaluating the obfuscation methods. For both, the iris codes for the entire dataset are computed for a selected number of parameter configurations for each obfuscation method.
+
+The first test compares the iris codes from the obfuscated images with the original iris codes derived from the unmodified images. The resulting distances thus reflect data from a situation where the obfuscated data is checked against an existing iris database for matches. 
+
+The other test compares the obfuscated codes internally and therefore reflect the possibility of constructing a new iris database from obfuscated images and using it for subsequent identification. 
+
+Both tests are equally relevant. The former determines whether the obfuscation methods can be used as safeguards against being recognised using a known reference while the latter determines if obfuscated images can related ..... Both situations are problematic as...

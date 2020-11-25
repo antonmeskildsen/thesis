@@ -1,0 +1,36 @@
+\makenoidxglossaries
+
+\newglossaryentry{eye-process}
+{
+    name={eye information process},
+    description={Is any process that uses a human eye as its input and has the aim of extracting some property from its appearance or movements.}
+}
+
+%% This code creates the groups
+% -----------------------------------------
+\usepackage{etoolbox}
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{E}{Eye processing model sets}{%
+  \ifstrequal{#1}{T}{Terminology}{%
+  \ifstrequal{#1}{O}{Other Symbols}{}}}%
+]}
+% -----------------------------------------
+
+\makenomenclature
+
+% \nomenclature[E]{$\mathcal{Q}$}{Set of input signals in an eye processing model.}
+% \nomenclature[E]{$\mathcal{R}$}{Set of decoded results.}
+% \nomenclature[E]{$\mathcal{f_e}$}{Encoding function.}
+% \nomenclature[E]{$\mathcal{P}$}{Set of processing functions.}
+% \nomenclature[E]{$\mathcal{D}$}{Set of decoders.}
+% \nomenclature[E]{$Q_i$}{Specific input signal.}
+% \nomenclature[E]{$R_i$}{Specific output signal corresponding to the transmitted version of $Q_i$.}
+% \nomenclature[E]{$f_e$}{Encoding function.}
+% \nomenclature[E]{$f^p_i$}{Specific processing function.}
+% \nomenclature[E]{$f^d_i$}{Specific input signal.}
+
+\nomenclature[O, Z]{$P_{X}(x)$}{Probability density function of $X$.}
+\nomenclature[O, G]{$\delta_{x,y}$}{Dirac delta function.}
+\nomenclature[O, A]{$H(X)$}{Entropy of $X$.}
+\nomenclature[O, A]{$\mathcal{I}(X;Y)$}{Mutual information of $X$ and $Y$.}

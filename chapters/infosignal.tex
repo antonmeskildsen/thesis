@@ -1,0 +1,93 @@
+\chapter{A model for eye information}
+\subsection{Image entropy}\todo{Omskriv og tilføj detaljer}
+Entropy is based on a representation of signals as random samples, at least in the discrete case which is the one we consider here. This means that individual symbols are independent by the definition of a random sample (REF). Consequently, signals that exhibit clear correlations between symbols are not accurately presented. By definition of mutual information $H(Y|X) \leq H(Y)$ with equality achieved only if they are independent, i.e. $I(X;Y) = 0$. 
+
+Image pixels are not typically independent, as the light measurements they represent are highly dependent on the scene in which it was taken. A pessimistic view is that none of the pixels are completely independent of each other. In this case, the entropy of an image $I$ 
+
+I therefore proposal a general notion of creating a transformation of $I$ such that its individual symbols become independent. 
+
+The image gradient, denoted $\nabla I$ ...
+
+Gabor wavelet filters 
+
+In order to calculate the mutual information between the original and filtered images, it is necessary to create their joint distribution as well. Since both the gradient and frequency response distributions are two-dimensional, the joint distribution is four-dimensional
+
+\begin{multline}
+    P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) = \sum_m\sum_n \delta_{i, f_x(m, n)}\delta_{i, f_y(m, n)}\delta_{i, \hat{f}_{\hat{x}}(m, n)}\delta_{i, \hat{f}_{\hat{y}}(m, n)}
+\end{multline}
+
+The rather cumbersome expression for the mutual information is
+\begin{multline}
+    I(f, \hat{f}) = \sum P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) \log \frac{P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y})}{P_{f_x, f_y}(x, y)P_{\hat{f}_x, \hat{f}_y}(\hat{x}, \hat{y})}
+\end{multline}
+
+%Clearly, photographs are an example of signals where each symbol is highly dependent on the others because they represent measurements of light which is dependent on the physical location. ...
+
+%This is not a property of the image format itself, perfectly random and independent pixel values can easily be created synthetically, but of the physical world. Images are nothing more than a series of measurements of light intensity. The light intensity however, is dependent on the objects and materials that has emitted or affected it. Since physical objects 
+
+\begin{equation}
+    H(X, Y) = 
+\end{equation}
+
+
+\section{Signal processing}\todo{Skal måske længere op - prøv at få noget flow i det - kræver en del arbejde}
+In its most abstract form, a signal is simply a function. Typically though, signals are used specifically to refer to functions that are representations of a physical or abstract quantity that varies in intensity over its range. \emph{Signal processing} is a scientific field covering the study of signals. This includes analysis 
+
+Images are discrete signals that vary in space along two dimensions and possibly in depth (for creating colour images). 
+
+
+\begin{definition}[Periodic functions]
+A function $f: A \rightarrow B$ is said to be periodic if, for some $P\in A$, $\forall x\in A: f(x+P) = f(x)$.
+\end{definition}
+
+\begin{definition}[Fourier series]
+Any periodic function 
+\begin{equation}
+    s_N(x) = \frac{a_0}{2} + \sum_{n=1}^\infty\left(a_n \cos\frac{2\pi nx}{P} + b_n \sin\frac{2\pi nx}{P}\right),
+\end{equation}
+
+\end{definition}
+
+The Fourier transformation makes it possible to represent a signal as a function of frequency instead of time. For image ssss...
+
+
+
+\subsection{Image filters}
+Many image modifications are more easily analysable and applicable in the frequency domain. 
+
+\subsubsection{Convolution}
+
+\begin{definition}[Convolution]
+The convolution operation is denoted by the symbol $*$. For functions $f$ and $g$, it is defined as 
+\begin{equation}
+    (f*g)(t) = \int_{-\infty}^\infty f(\tau)g(t-\tau)d_\tau
+\end{equation}
+\end{definition}
+
+\begin{equation}
+    \widehat{(f*g)}(t) = k\hat{f}(t)\hat{g}(t)
+\end{equation}
+
+Convolution for images:
+\begin{align}
+    \hat{I}(x, y) = \sum_{i=x-s}^{x+s}\sum_{j=y-s}^{y+s} I(x,y)k(i,j),
+\end{align}
+
+\subsubsection{Wavelet transforms}
+A wawelet 
+
+A Gabor wavelet is simply the product of a complex sinusoidal function (also called complex exponentials) and a complex Gaussian function. Here, we define it in a two-dimensional variation with adjustable frequency $\omega$, angle $\theta$, and standard deviation $\sigma$ of the envelope:
+\begin{align}
+    g(x,y)_{\omega, \theta, \sigma} &= \frac{1}{\sigma\sqrt{\pi}} e^{-\frac{\hat{x}^2+\hat{y}^2}{2\sigma^2}} e^{i 2\pi \hat{x}\omega}\\
+    \hat{x} &= x\cos\theta + y\sin\theta \\
+    \hat{y} &= -x\sin\theta + y\cos\theta.
+\end{align}
+
+
+\section{Differential privacy}\todo{Virker til at idéen er på plads men tekst mangler}
+
+\begin{enumerate}
+    \item What is it + definition
+    \item How might it be applied in the case of these images?
+    \item When should it not be applied?sk
+\end{enumerate}

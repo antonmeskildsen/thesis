@@ -1,0 +1,64 @@
+\chapter{Future work}
+
+Neural networks are just differentiable functions which are optimised using stochastic gradient descent. The stochastic modifier signifies, that instead of determining the true gradient, a smaller sample is used instead, resulting in realistic time-frames for optimisation. Although neural networks are often described by layers and neurons, this terminology is all a combination of the history of their creation and useful architectural terms. In general, we may model any function as long as it can be differentiated.
+
+For iris obfuscation, convolutional neural networks are of special interest, since they are simply a stack of linear functions with non-linear activations connected together. Thus they can be applied in the embedded hardware domain if constructed suitably.
+
+\subsection{Neural network basics}
+A neural network is defined by a function $f$ and an associated cost function $J$. 
+
+\subsection{Construction}
+Not possible.....  In the proposed embedded domain, resources are generally scarce. Therefore, the obfuscation process would ideally work locally and thus not require memory to store a whole image. This also increases claims of security if the original image is never present in contiguous memory.
+
+\subsection{Training}
+I have a thesis that a complete gaze estimation pipeline trained for maximal gaze accuracy and minimal mutual information should be able to achieve close to or better performance than SOA. My main argument is that noise supression is necessary for gaze estimation and that conjointly trained obfuscation and gaze systems would result in obfuscation filters that retain important information. For example, some gaze methods use the iris texture for accurate positioning. A CNN filter could potentially retain some form of textural information while ...
+
+From this perspective, a learning iris obfuscation experiment is as much about creating effective obfuscation methods as it is about discovering possibilities for gaze estimation under a specific constraint.
+
+\begin{align}
+    J(\theta) = \frac{1}{2}\mathbb{E}_{x,y\sim \hat{p}_{data}} ||\mathbf{y}-f(x;\theta)||^2
+\end{align}
+
+\begin{align}
+    Z_{i,j,k} = \sum_{l,m,n} V_{l,j+m-1, k+n-1}K_{i,l,m,n}
+\end{align}
+
+\begin{align}
+    width = (m-1)/2*L
+\end{align}
+
+\subsubsection{Differentiable histogram}
+
+\begin{align}
+    \Pi_k(z) = \sigma(\frac{z-\mu_k+L/2}{W}) - \sigma(\frac{z-\mu_k-L/2}{W})
+\end{align}
+
+\begin{align}
+    P_I(k) = \frac{1}{N}\sum_{x\in\Omega}\Pi_k(I(x))
+\end{align}
+
+\begin{align}
+    P_{\nabla I}(\partial x, \partial y) = \frac{1}{N}\sum_{x\in\Omega}\Pi_{\partial x}(I(x))\Pi_{\partial y}(I(x)) = \frac{1}{N}P_{\partial x}P_{\partial y}^T
+\end{align}
+
+\begin{align}
+    P_{\nabla I_1, \nabla I_2}(\partial x_1, \partial y_1, \partial x_2, \partial y_2) = \frac{1}{N}\sum_{x\in\Omega}\Pi_{\partial x_1}(I(x))\Pi_{\partial y_1}(I(x))\Pi_{\partial x_2}(I(x))\Pi_{\partial y_2}(I(x))
+\end{align}
+
+\begin{align}
+    J(\nabla I_1, \nabla I_2) = \frac{1}{N}P_1P_2^TP_3P_4^T
+\end{align}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}
+    \addplot[
+        samples=100
+    ]
+    {1/(1+exp(-x)};
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}

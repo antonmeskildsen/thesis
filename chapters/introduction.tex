@@ -1,0 +1,54 @@
+\chapter{Introduction}
+\emph{This thesis was written as a final part of the master of science in computer science programme at the IT University of Copenhagen. It represents my own original work and any uses of external resources, whether they be technical or literary, have clearly been marked as such.}
+\\
+\\
+\noindent This thesis concerns the discovery, classification, and removal of sensitive information in eye tracking. In this context, sensitive information is a catch-all that includes any property that is considered personal, whether by law or by social or ethical standards. This problem area has only recently gained interest in the research community and relative few studies exist on the subject \parencite{BRENDAN_ARTICLE, BRENDAN_SNOW, differential-general, differential-general-two, privaceye}, despite a growing concern for how this data might be extracted and used from the increasingly pervasive eye tracking systems. 
+
+The purpose of this thesis is to start a scientifically based discussion of the nature of sensitive information in eye tracking and how eye tracking systems can be modelled in a manner that allows its incorporation and thus provide a common reference frame for understanding how methods for information extraction and removal compare. I will focus on iris recognition as a case because it is prevalen.....
+
+Iris recognition will be used for in-depth experimental analysis due to its prevalence and high precision. 
+
+
+%This sensitive information is not isolated as is the case with, for example, one's social security number, but is instead a component of the data sources used in eye tracking, including eye images and gaze signals.
+
+
+%The isolation and removal of sensitive information in eye tracking is problematic because it is extracted from the same data sources used in eye tracking processes. An eye tracker consists of a capturing system, a gaze estimator, and optionally some analysis component. 
+%the extent to which sensitive information is present in eye tracking data and how eye tracking systems can be modelled in a manner that allows incorporation of security factors.
+
+
+
+%or is deemed by law or regulation to be 
+
+%* detailed analysis of iris obfuscation
+%%* detailed analysis of filters on images
+% * better results
+% * critical issues discovered
+% * generalisable model proposed
+
+
+% Today's digital world has enabled information sharing on a scale few would have imagined even just a few decades ago. This 
+
+\subsection{Background}
+Today's digital world has enabled information sharing on a scale few would have imagined even just a few decades ago. This has lead to increasing concerns over the ethical and legal use of information that may in some way either enable identification of individuals or enable discovery of specific traits of individuals. Concrete details like social security numbers, medical histories, and home addresses, are clearly sensitive to some degree, either by legal rights to privacy as ... by many countries.. However, some properties may indirectly be inferred, e.g. through gaze data. 
+
+If a sensitive information is not used, it is a liability, both ethically and legally. In essence, it is preferable for a data owner to minimise their amount of sensitive information since it minimises the impact of data leakage and data sharing. 
+
+For eye-tracking data, these last points are especially important. In research, both results from gaze analysis and source eye images are frequently published to allow reproduction and further analysis. Consumer products frequently collect user data for internal analysis and product improvement. In both cases, obfuscation methods would decrease the risks and complexity involved with handling the data.
+
+From an ethical perspective, the extent to which these analyses are possible is not well known in the public. Even in the eye-tracking research community, there is relatively little data on 
+
+
+\subsection{State of the art}
+
+\subsection{Problem definition}
+
+\begin{quotation}
+How can sensitive information be removed from eye-tracking processes and data while retaining utility for eye-tracking applications?
+\end{quotation}
+
+This problem statement leads naturally to three sub-questions: (1) what constitutes sensitive information in eye tracking and how can it be quantified/modelled, (2) how can this information be removed or obscured to make personal identification impossible without destroying information relevant to eye tracking, and (3), how can utility and security be defined in measurable terms that cover general eye-tracking processes? These questions are the key to solving this problem and are what I will tackle in this project and my thesis as well. The goal is not to answer all the questions but to gain insight into how this problem can be defined in a manner that is logically valid and scientifically measurable. This will make it possible to reason about and optimise the performance of proposed methods for removing sensitive information. 
+
+\subsection{Method}
+The thesis is constructed around the central piece of research which is presented in the article \emph{My article name} in (REF). The article concerns iris pattern obfuscation and presents multiple methods that improve obfuscation effectiveness. Additionally, the article presents the eye information model and uses it as a device to propose the improved obfuscation methods. The article presents the first comprehensive analysis of iris obfuscation and therefore the first actual overview of how effective this approach to prevention of identification is.
+
+The article is prepended by a more in-depth treatment of the background material as well as a more generalised presentation of the eye information model with examples of how it can be applied to other analysis problems. The article is followed by additional details on the experimental process and methods and results that were not presented in the article itself. Finally, a section on future developments presents my view on how this research field could evolve and what constitutes interesting paths for future investigations.

@@ -1,17 +1,102 @@
-\documentclass{report}
-\usepackage[utf8]{inputenc}
+\documentclass[11pt, a4paper, twoside]{report}
 
-\title{Thesis}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{multicol}
+\usepackage{multirow}
+
+\usepackage{fontspec}
+\usepackage{unicode-math}
+
+\usepackage[
+    style=authoryear-icomp,
+    citestyle=authoryear-icomp
+]{biblatex}
+\addbibresource{thesis.bib}
+\addbibresource{article.bib}
+
+\DeclareLabeldate[online]{%
+  \field{date}
+  \field{year}
+  \field{eventdate}
+  \field{origdate}
+  \field{urldate}
+}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{subcaption}
+\usepackage{glossaries}
+\usepackage{nomencl}
+
+\usepackage{todonotes}
+
+\usepackage{quotchap}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{shapes.geometric, arrows}
+
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LE]{}
+\fancyhead[RO]{}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\include{diagram-config}
+
+
+\include{glossary}
+
+
+\title{Iris obfuscation}
 \author{Anton Mølbjerg Eskildsen}
 \date{August 2020}
 
 \begin{document}
+\setmathfont{STIX2Math}[
+Extension={.otf},
+Path=./fonts/,
+Scale=1]
+\setmainfont{STIX2Text}[
+Extension={.otf},
+Path=./fonts/,
+UprightFont={*-Regular},
+BoldFont={*-Bold},
+ItalicFont={*-Italic},
+BoldItalicFont={*-BoldItalic}]
 
 \maketitle
 
 \tableofcontents
 
-\chapter{Introduction}
+\printnoidxglossaries
+\printnomenclature[1in]
+
+\include{chapters/introduction}
+\include{chapters/background}
+\include{chapters/theory}
+\include{chapters/infosignal}
+
+
+\include{chapters/article}
+
+\include{chapters/method}
+
+\include{chapters/results}
+
+\include{chapters/learning}
+
 \chapter{Conclusion}
+
+\printbibliography
 
 \end{document}
