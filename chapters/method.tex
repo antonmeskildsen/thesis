@@ -1,21 +1,77 @@
-\chapter{Implementation}
+\chapter{Method}
 This chapter presents additional details on the experimental work performed as part of this thesis. It builds directly on the material presented in the article, which describes only the most relevant and critical details. Additional results and experiments are presented in the next chapter.
 
 The primary contribution of this work in terms of implemented software, is the platform designed and created for the experimental work presented in the article. The platform consists of tools for optimisation, entropy calculations, iris recognition, gaze estimation as well as a platform for defining, running, and analysing iris obfuscation experiments. 
 
 
-\section{Platform overview}
+\section{Implementation details}
+This section presents the scope and important details of the software systems implemented to achieve the goals...
+
 FIGREF shows a high-level diagram of the provided software. 
 
+T
 
-\section{Optimisation engine}
+
+\subsection{Optimisation engine}
 In order to support different approaches to optimisation, the component has been designed such that any form of optimisation may be implemented. 
 
 The MultiObjectiveOptimizer class expects an Objective and produces a set of results by calling its run method. The run method is implemented differently for each subclass to support different types of optimisation. The NaiveMultiObjectiveOptimizer does not use feedback for determining parameters for the next iteration and instead relies on sampling based parameter selection - this is the class used in the experiments. Additionally, a PopulationMultiObjectiveOptimizer is an implementation of the so called \textit{vector evaluated genetic algorithm}, which uses population strategies to combine and select parameters. The method is discussed in further detail in SECREF, where its possible uses for future work is considered.
 
-The abstract Objective class only has a single sub-class ObfuscationObjective for now but additional ones would be necessary for other optimisation methods or other optimisation tasks. As mentioned in the article, the 
+Each optimiser has exactly one Objective. The abstract Objective class only has a single sub-class ObfuscationObjective for now but additional ones would be necessary for other optimisation methods or other optimisation tasks. The purpose of the Objective class is to calculate a set of Metrics given a set of parameters. In ObfuscationObjective this is done as described in the article by using different datasets for different metrics. 
 
-\subsection{Gaze estimation}
+Specifically, the objective object is initialised with a pool of datasets divided into three categories: Iris datasets, Gaze datasets, and pupil centre datasets. As seen on the class diagram, this terminology arises from the fact that the gaze datasets are subdivided. The objective can be initialised with any number of different metrics provided as objects. Calling the \emph{eval} function results in the metrics being calculated for a number of samples drawn from the datasets. The sample size is determined at the moment of initialisation.
+
+Results are recorded in a special Logger object, which wraps a dictionary and provides convenient methods for accessing the data.
+
+\subsection{Interactive tools}
+\begin{figure}
+	\begin{subfigure}{0.3\textwidth}\centering
+		\includegraphics[width=1\linewidth]{figures/labs/EntropyLab}
+		\caption{Entropylab}\label{fig:tools:entropylab}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}\centering
+		\includegraphics[width=1\linewidth]{figures/labs/GazeLab}
+		\caption{GazeLab}\label{fig:tools:gazelab}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}\centering
+		\includegraphics[width=1\linewidth]{figures/labs/ObfuscationLab}
+		\caption{ObfuscationLab}\label{fig:tools:obfuscationlab}
+	\end{subfigure}
+	\\
+	\begin{subfigure}{0.3\textwidth}\centering
+		\includegraphics[width=1\linewidth]{figures/labs/OptimisationLab}
+		\caption{OptimisationLab}\label{fig:tools:optimisationlab}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}\centering
+		\includegraphics[width=1\linewidth]{figures/labs/ObfuscationResultAnalyser}
+		\caption{ObfuscationResultAnalyser}\label{fig:tools:obfuscationresultanalyser}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.3\textwidth}\centering
+		\includegraphics[width=1\linewidth]{figures/labs/OptimisationResultAnalyser}
+		\caption{OptimisationResultAnalyser}\label{fig:tools:optimisationresultanalyser}
+	\end{subfigure}
+	
+	\caption{Screenshots showing the individual interactive tools. The code is, of course, included with the thesis submission as well.}\label{fig:tools}
+\end{figure}
+
+In terms of the optimisation experiment described in the article, each obfuscation method represents one MultiObjectiveOptimizer instance. To make experimentation and repeatability easier, a number of interactive tools are created using StreamLit which is a Python library for creating data-rich, interactive, web applications.
+
+Six different interactive tools were created - some for experimenting with 
+\begin{description}
+	\item [EntropyLab] Tool for experimenting with image-based entropy measurements and their distributions.
+	\item [GazeLab] Tool for experimenting with gaze estimation parameters and evaluating performance.
+	\item [ObfuscationLab] Explorative tool for testing the iris obfuscation algorithm and setting up configuration files for large-scale testing. 
+	\item [OptimisationLab] Tool used for running small optimisation experiments and creating configurations for larger ones. 
+	\item [ObfuscationResultsAnalyser] For testing the result of running the iris obfuscation experiment. Only allows simple analyses and was mostly used during development of the iris recognition algorithm to test performance.
+	\item [OptimisationResultsAnalyser] Detailed interactive analysis for the parameter experiments. It has been used primarily to discover interesting facets of the results. Due to the large number of metrics used for analysis, interactive visualisations provide....
+\end{description}
+
+
+\section{Gaze estimation}
 For this project, I chose to implement my own gaze estimation system. Although previous students at ITU have developed eye tracking software which was available to me, both the system and the hardware was not ideal for this use case either. 
 
 The physical setup is a remote camera that is positioned close to the eye to create circumstances similar to head-mounted eye trackers. Participants are asked to rest their head on a stand which ensures relative stability of the eye's location relative to the camera. A screen is used to show target which are to be predicted by the software. An infrared LED fastened to the screen acts as both a light and for creating a corneal reflection. Details on calibration are left to the article.
