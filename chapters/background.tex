@@ -55,24 +55,64 @@ Most importantly for this thesis however, are applications in \acrfull{hci} whic
 \subsection{How it works}
 All eye-tracking systems are composed of some common elements. FIGREF shows a possible component schematic of such a generalised system. At the most abstract level - an eye tracker works by capturing images of one or both of the subject's eyes and uses a number of different techniques to track the eyes themselves and to predict gaze. Because the use cases vary widely, a number of important classifications exist based on the hardware setup as well as the analysis methods employed.
 
-The capturing setup is primarily determined by two factors. The first is the relative mounting position of the eye-facing camera relative to the subject. In \gls{head-mounted} \gls{eye-tracking},  the eye-facing camera is fixed relative to the head of the subject and hence translational movements of the eye are kept to a minimum. The alternative is remote \gls{eye-tracking} where the camera is not fixed to the head and therefore allows more degrees of movement. Head-mounted eye-trackers may typically be augmented by a \gls{scene-camera} which points directly away from their head and can thus be used to determine what they are looking at a given point in time.
+The capturing setup is primarily determined by the relative mounting position of the eye-facing camera relative to the subject (REF). In \gls{head-mounted} \gls{eye-tracking},  the eye-facing camera is fixed relative to the head of the subject and hence translational movements of the eye are kept to a minimum. The alternative is remote\todo{glossary} \gls{eye-tracking} where the camera is not fixed to the head and therefore allows more degrees of movement (REF). Head-mounted eye-trackers may typically be augmented by a \gls{scene-camera} which points directly away from their head and can thus be used to determine what they are looking at a given point in time. \Gls{head-mounted} \gls{eye-tracker}s are often used when high-precision detection or gaze estimation is needed but comes at the cost of being less convenient to set up than a remote camera (REF). Remote setups may provide high-precision eye-tracking if the head is fixed using a chin-rest or similar. The precision gained by fixing the relative position of eye and camera most stems mainly from the much higher utilisation of the image resolution as the eye can fill the entire image. Eye-tracking precision is generally affected by the environment, which is why controlled environments are generally preferred if possible. In many cases however, such as attention analysis, the environment cannot be controlled .... \todo{Example images and hardware setups!}
 
-This kind of setup is often used when high-precision detection or gaze estimation is needed, e.g. research. It 
+Eye-tracking systems cover a large range of use cases that require the detection of different properties. \Gls{gaze} is the most widely used end-product which may itself be used in secondary analyses of other personal properties (SECTION EYEINFO). Other important products include the iris and sclera textures which may be used for personal identification (REF) and the size of the pupil as it changes in response to external stimuli (REF). \Gls{gaze} is also typically used for eye movement analysis which produces an event-based overview of what kind of movements occur at given points in time (REFS). The different end-products have different requirements, but they all share the fundamental concept of being properties of interest that should be extracted from the source eye images. This generalisation idea is built upon in later sections (SECREF) to provide a theoretical model for eye-tracking that is useful for analysing privacy....
 
- (1) the capturing setup which includes the number of cameras and how they are positioned and secured during capture. (2) the analysis system which is largely divided into an appearance-based subgroup where the image to gaze-mapping happens in a single step and in a feature-based subgroup where the eye itself or some important elements are determined first and then used in a gaze estimation model.
+The property detection methods, of which there may be many or few in a given eye-tracking system, are typically classified as either appearance-based or feature-based. However, because of how modern systems including convolutional neural network (CNN) based ones makes the line seem less clear-cut, I redefine the two classes as holistic and local approaches after the same terms used in (dan REF). Figure (REF) shows the classification scheme. Holistic approaches consider the eye in its entirety, either by methods such as template matching (REF), or machine learning models such as CNNs mapping images directly to gaze. Local approaches instead consider specific eye elements or image features which are then combined. 
 
-Appearance-based methods are typically 
+Eye-trackers may mix these methods. For example, CNNs which are inherently appearance-based have been shown to be extremely accurate at predicting the pupil centre which is then used in a two-dimensional gaze estimation model whic
 
-The image based methods, which are the sole focus in this thesis, are typically broken down into components as shown in (FIGREF). Generally, the steps of eye detection and gaze estimation are separate, but in the case of \emph{appearance-based} gaze estimation, the image is mapped directly to gaze and thus skips the detection step. This approach is dominated by deep neural networks (REFS) and is most prominent in settings 
+\todo{Continue!}
+
+%appearance-based and feature-based methods. The former covers methods that use the source image appearance to predict an output property
+
+%Appearance-based methods use the image appearance itself to determine some property, e.g. eye position. This can be done either by template matching (REF), filter responses, or, more widespread today, using neural networks (REFS). 
+
+%Feature-based 
+%Shape-based models cover methods that try to fit a prior eye shape model to a single or several features in the image. Feature-based approaches aim at detecting non-typical features such as corneal reflections of LED lights or eye corners.
+
+
+%Gaze estimation models are generally divided into two-dimensional models, three-dimensional models, and appearance-based models. The former two use detected eye features for gaze estimation and are therefore often collectively referred to as feature-based methods (REF dan). This is not to be confused with the feature-based paradigm itself although the two are often used together.
+
+%The image based methods, which are the sole focus in this thesis, are typically broken down into components as shown in (FIGREF). Generally, the steps of eye detection and gaze estimation are separate, but in the case of \emph{appearance-based} gaze estimation, the image is mapped directly to gaze and thus skips the detection step. This approach is dominated by deep neural networks (REFS) and is most prominent in settings 
 
 
 
-Depending on the approach used, eye detection and gaze estimation may be individual steps or combined. 
+%Depending on the approach used, eye detection and gaze estimation may be individual steps or combined. 
 
-Knowing where people are looking is useful both for studying human behaviour and providing interactive technologies. 
+%Knowing where people are looking is useful both for studying human behaviour and providing interactive technologies. 
 
-Eye-tracking is a scientific field that cover many different disciplines from computer science and engineering to psychology and biology. These can be divided into the research in eye-tracking technology and research enabled by eye-tracking technology. This section focuses on the former. It gives a short introduction to the eye-tracking technologies available today, how they work, and where they are used.
+%Eye-tracking is a scientific field that cover many different disciplines from computer science and engineering to psychology and biology. These can be divided into the research in eye-tracking technology and research enabled by eye-tracking technology. This section focuses on the former. It gives a short introduction to the eye-tracking technologies available today, how they work, and where they are used.
 
 
 \section{Privacy}
 This section presents potentially sensitive information sources in eye-tracking systems. The first part focuses on sensitive information that is extracted directly from eye images and the second part focuses on information derived from gaze signals.
+
+
+
+
+\begin{definition}[Sensitive information}
+	
+\end{definition}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
