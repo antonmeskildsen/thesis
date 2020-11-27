@@ -30,7 +30,7 @@
 \usepackage{cleveref}
 \usepackage{caption}
 \usepackage{subcaption}
-\usepackage{glossaries}
+\usepackage[toc, acronym]{glossaries}
 \usepackage{nomencl}
 
 \usepackage{todonotes}
@@ -79,9 +79,6 @@ BoldItalicFont={*-BoldItalic}]
 
 \tableofcontents
 
-\printnoidxglossaries
-\printnomenclature[1in]
-
 \include{chapters/introduction}
 \include{chapters/background}
 \include{chapters/theory}
@@ -99,5 +96,10 @@ BoldItalicFont={*-BoldItalic}]
 \chapter{Conclusion}
 
 \printbibliography
+
+\newpage
+
+\printnoidxglossaries
+\printnomenclature[1in]
 
 \end{document}

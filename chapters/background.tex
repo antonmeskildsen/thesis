@@ -43,6 +43,32 @@ There are five basic categories of eye movements: saccades, vergence movements, 
 
 
 \section{Eye-tracking}
+\Gls{eye-tracking} covers the processes of detecting the location and movements of eyes and estimating \gls{gaze}. Gaze is defined as either a specific \acrfull{por} or as a \emph{direction}. Today, this is done exclusively through image based techniques (REF) but intrusive methods, typically using some form of special contact lens in combination with a sensor, also exist (REF).
+
+\subsection{Why}
+To understand \gls{eye-tracking}, we first need to understand the purposes for which it was made. 
+
+In terms of research, \gls{eye-tracking} has traditionally been of interest in psychology (REfs) and physiology (REFS) studies due to the close connection between gaze and attention and the prominent use of eyes in humans everyday lives. A typical application is the study of visual attention, i.e. where a person is looking in a specific situation over time. Examples include studies of driver behaviour (REF), shopping behaviour (REF), analysis of reading ability and how reading works (REF), how the eyes are used in elite sports and whether analysis may be used for athletic improvements (REFS), and many more. In the medical industry, eye-tracking has been used as a tool in diagnosis of both psychological and physical conditions (REF). 
+
+Most importantly for this thesis however, are applications in \acrfull{hci} which is a term that covers technologies or systems that act as interfaces between humans and computers (REF). The rapid decrease in part costs has made consumer-level and large-scale medical \acrlong{hci} feasible. Major corporations investing in \acrfull{vr} technologies including NVidia and Facebook, have started major research efforts towards enabling low-cost and precise eye-tracking built into \acrshort{vr}-headsets (REF). In the medical industry, technologies such as tablets have already been deployed on large scales to enrich the communication abilities of people suffering from various diseases (REF). Eye-tracking technologies that are easier to use and simpler to set up are actively being researched as well (REF). 
+
+\subsection{How it works}
+All eye-tracking systems are composed of some common elements. FIGREF shows a possible component schematic of such a generalised system. At the most abstract level - an eye tracker works by capturing images of one or both of the subject's eyes and uses a number of different techniques to track the eyes themselves and to predict gaze. Because the use cases vary widely, a number of important classifications exist based on the hardware setup as well as the analysis methods employed.
+
+The capturing setup is primarily determined by two factors. The first is the relative mounting position of the eye-facing camera relative to the subject. In \gls{head-mounted} \gls{eye-tracking},  the eye-facing camera is fixed relative to the head of the subject and hence translational movements of the eye are kept to a minimum. The alternative is remote \gls{eye-tracking} where the camera is not fixed to the head and therefore allows more degrees of movement. Head-mounted eye-trackers may typically be augmented by a \gls{scene-camera} which points directly away from their head and can thus be used to determine what they are looking at a given point in time.
+
+This kind of setup is often used when high-precision detection or gaze estimation is needed, e.g. research. It 
+
+ (1) the capturing setup which includes the number of cameras and how they are positioned and secured during capture. (2) the analysis system which is largely divided into an appearance-based subgroup where the image to gaze-mapping happens in a single step and in a feature-based subgroup where the eye itself or some important elements are determined first and then used in a gaze estimation model.
+
+Appearance-based methods are typically 
+
+The image based methods, which are the sole focus in this thesis, are typically broken down into components as shown in (FIGREF). Generally, the steps of eye detection and gaze estimation are separate, but in the case of \emph{appearance-based} gaze estimation, the image is mapped directly to gaze and thus skips the detection step. This approach is dominated by deep neural networks (REFS) and is most prominent in settings 
+
+
+
+Depending on the approach used, eye detection and gaze estimation may be individual steps or combined. 
+
 Knowing where people are looking is useful both for studying human behaviour and providing interactive technologies. 
 
 Eye-tracking is a scientific field that cover many different disciplines from computer science and engineering to psychology and biology. These can be divided into the research in eye-tracking technology and research enabled by eye-tracking technology. This section focuses on the former. It gives a short introduction to the eye-tracking technologies available today, how they work, and where they are used.
