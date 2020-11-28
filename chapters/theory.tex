@@ -146,142 +146,100 @@ proof: By the definition of measures, the mutual information $I$ is always non-n
 % \chapter{Information and signals}
 % This chapter reviews the theoretical tools used for the modelling and analysing eye information in this thesis. It is an expanded version of the presentation in the article and reveals more details of how the theoretical parts connect and have directly inspired the solution proposals.
 
-\section{A model for eye information}
-This section introduces a probabilistic model for understanding \emph{eye processing systems}. The purpose of the proposed model is to allow reinterpretation of gaze estimation, iris recognition, and potentially other eye information processes under a common reference frame. This makes it easier to understand how potentially conflicting goals such as iris obfuscation and gaze estimation interact and what trade-offs between them are likely to occur. Our hope is that the model will be used as a point of reference and comparison for future studies in this field.
+\subsection{Image entropy}\todo{Omskriv og tilføj detaljer}
+Entropy is based on a representation of signals as random samples, at least in the discrete case which is the one we consider here. This means that individual symbols are independent by the definition of a random sample (REF). Consequently, signals that exhibit clear correlations between symbols are not accurately presented. By definition of mutual information $H(Y|X) \leq H(Y)$ with equality achieved only if they are independent, i.e. $I(X;Y) = 0$. 
 
-An eye processing system is any software and/or hardware system which uses eye image capture to extract information about its subjects. It therefore covers both gaze estimation and iris recognition. 
+Image pixels are not typically independent, as the light measurements they represent are highly dependent on the scene in which it was taken. A pessimistic view is that none of the pixels are completely independent of each other. In this case, the entropy of an image $I$ 
 
+I therefore proposal a general notion of creating a transformation of $I$ such that its individual symbols become independent. 
 
-%This allows analysis of how different goals affect each other. In the context of this paper, it specifically provides a framework for understanding how 
+The image gradient, denoted $\nabla I$ ...
 
-%This section presents a model and a methodology for understanding eye information processes. 
-%This section presents an overview of the model used throughout the paper to examine the processes of iris recognition and gaze estimation from a common frame of reference. This allows critical analysis 
+Gabor wavelet filters 
 
+In order to calculate the mutual information between the original and filtered images, it is necessary to create their joint distribution as well. Since both the gradient and frequency response distributions are two-dimensional, the joint distribution is four-dimensional
 
+\begin{multline}
+    P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) = \sum_m\sum_n \delta_{i, f_x(m, n)}\delta_{i, f_y(m, n)}\delta_{i, \hat{f}_{\hat{x}}(m, n)}\delta_{i, \hat{f}_{\hat{y}}(m, n)}
+\end{multline}
 
+The rather cumbersome expression for the mutual information is
+\begin{multline}
+    I(f, \hat{f}) = \sum P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) \log \frac{P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y})}{P_{f_x, f_y}(x, y)P_{\hat{f}_x, \hat{f}_y}(\hat{x}, \hat{y})}
+\end{multline}
 
+%Clearly, photographs are an example of signals where each symbol is highly dependent on the others because they represent measurements of light which is dependent on the physical location. ...
 
-%This section presents a model for understanding how information flows through such systems and how image manipulations affect the information measurement processes. This allows us to evaluate and compare the obfuscation methods from a purely theoretical perspective which ... \todo{Overvej integration.. hvad giver det her? }
+%This is not a property of the image format itself, perfectly random and independent pixel values can easily be created synthetically, but of the physical world. Images are nothing more than a series of measurements of light intensity. The light intensity however, is dependent on the objects and materials that has emitted or affected it. Since physical objects 
 
-Any eye processing system has the goal of accurately measuring some properties of the real world through capture of eye images. These properties are encoded through physical processes as signals which are transformed and processed with the goal of isolating the property of interest from everything else. The systems therefore essentially have the function of signal denoising, albeit rather aggressively because anything but the target property is considered noise. Similarly, eye processing systems comprise a communication channel pipeline, with each physical encoding, image capturing, or transformation process forming a component in the pipeline. We propose a probabilistic graphical model which allows interpretations from both perspectives. 
-
-%Similarly, information theory lets us define image processing as a communication system and analyse how uncertainty propagates and is added from noise. This lets us evaluate the effect of obfuscation methods directly on the image data. Although this is not in itself enough to demonstrate the effectiveness of the proposed methods, it creates a reference frame that does not depend on specific implementations of any algorithms. We propose a model which allows useful interpretations from both points of view and which has a simple graphical representation (shown in \autoref{fig:model}).
-
-\begin{figure}
-    \centering
-    \begin{tikzpicture}[node distance=1.3cm]
-        \node (q1) [] {$Q_1$};
-        \node (qd) [right of=q1] {$\dots$};
-        \node (qn) [right of=qd] {$Q_n$};
-        \node (t1) [align=right, left of=q1] {(1)};
-        
-        %\node (e1) [rect, below of=q1] {$f_e^{(1)}$};
-        %\node (ed) [right of=e1] {$\dots$};
-        %\node (en) [rect, right of=ed] {$f_e^{(n)}$};
-        %\node (t2) [align=right, left of=e1] {(2)};
-        
-        
-        %\draw [arrow] (q1) -- (e1);
-        %\draw [arrow] (qn) -- (en);
-        
-        \node (c) [rect, below of=qd] {$f_e$};
-        \node (t3) [align=right, below of=t1] {(3)};
-        \draw [arrow] (q1) -- (c);
-        \draw [arrow] (qn) -- (c);
-        
-        \node (f1) [rect, below of=c] {$f_p$};
-        \node (fd) [below of=f1] {$\dots$};
-        \node (fn) [rect, below of=fd] {$f_n$};
-        \draw [arrow] (c) -- node[anchor=east] {I} (f1);
-        \draw [arrow] (f1) -- (fd);
-        \draw [arrow] (fd) -- (fn);
-        
-        \node (t4) [align=right, below of=t3] {(4)};
-        
-        \node (dd) [below of=fn] {$\dots$};
-        \node (d1) [rect, left of=dd] {$f_d^{(1)}$};
-        \node (dn) [rect, right of=dd] {$f_d^{(n)}$};
-        \node (t5) [align=right, left of= d1] {(5)};
-        
-        \draw [arrow] (fn) -- node[anchor=south east] {$I^*$} (d1);
-        \draw [arrow] (fn) -- node[anchor=south west] {$I^*$} (dn);
-        
-        \node (r1) [below of=d1] {$R_1$};
-        \node (rd) [right of=r1] {$\dots$};
-        \node (rn) [right of=rd] {$R_n$};
-        
-        \draw [arrow] (d1) -- (r1);
-        \draw [arrow] (dn) -- (rn);
-    \end{tikzpicture}
-    
-    \caption{Eye information processing model: (1) Input properties. (2) Functions that encode the physical manifestation and uncertainties of the source properties. (3) Image capturing process. (4) Image processing steps which may typically be described as a single function. (5) Decoding functions that aim to extract original properties, e.g. an iris pattern or gaze direction.}
-    \label{fig:model}
-\end{figure}
+\begin{equation}
+    H(X, Y) = 
+\end{equation}
 
 
-%We define a model that allows easy analysis from both a signal-processing centric and probability centric view. 
-
-Let an eye information processing system be defined by $\Lambda = \{Q, R, f_e, \mathcal{D}, \mathcal{P}\}$, where $Q=\{Q_1, \dots, Q_n\}$ is a set of source properties, $R=\{R_1,\dots,R_n\}$ is a set of output properties, $f_e$ is an encoding function, $\mathcal{D}=\{f_d^{(1)}, \dots, f_d^{(n)}\}$ is a set of decoding functions, and $\mathcal{P}=\{f_p^{(1)}, \dots, f_p^{(n)}\}$ is a set of processing functions. A graphical representation is shown in \autoref{fig:model}. The encoding functions in $f_e$ represent how properties are manifested as physical quantities and captured by a camera. This simplification retains the modelling of uncertainty in both processes. The results are given as $R_i = (f_d^{(i)}\circ f_p)(\hat{Q})$. To encode noise and information loss, all properties and functions are viewed as discrete signals composed of random samples of some distribution. The terms signal and property are therefore used interchangeably throughout this text.
+\section{Signal processing}\todo{Skal måske længere op - prøv at få noget flow i det - kræver en del arbejde}
 
 
-\section{Analysis}\todo{Introduktion / revider flow}
-The goal of any eye processing system is exactly to maximise mutual information and minimise conditional information between the decoded and original signals. This will be shown for both gaze estimation and iris recognition in (SECTION REF). For iris obfuscation, the goals compete, i.e. $I(R^{gaze};Q^{gaze})$ and $H(R^{iris}|Q^{iris})$ should be maximised while $H(R^{gaze}|Q^{gaze})$ and $I(R^{iris}|Q^{iris})$ should be minimised. This is problematic because the signals are both encoded in $I$ which is the signal we have to modify. 
 
-\begin{theorem}
-    For random variables $R$, $Q$ where $R=f(Q)$, then $f$ is a deterministic function if and only if $H(R|Q)=0$.
-\end{theorem}
+In its most abstract form, a signal is simply a function. Typically though, signals are used specifically to refer to functions that are representations of a physical or abstract quantity that varies in intensity over its range. \emph{Signal processing} is a scientific field covering the study of signals. This includes analysis 
 
-\begin{proof}
+Images are discrete signals that vary in space along two dimensions and possibly in depth (for creating colour images). 
 
-\begin{align}\label{eq:pr}
-\begin{aligned}
-    H(R|Q) = 0 &=-\sum_{r\in\mathcal{R}, q\in\mathcal{Q}} P(r,q)\log\frac{P(r,q)}{P(q)}\\
-    &= -\sum_{r\in\mathcal{R}, q\in\mathcal{Q}} P(r,q)\left(\log P(r,q) - \log P(q)\right)\\
-    &= \sum_{r\in\mathcal{R}, q\in\mathcal{Q}} P(r, q)\left(\log \sum_{r\in\mathcal{R}} P(r, q) - \log P(r,q)\right)
-\end{aligned}
-\end{align}
-\todo{Check this stuff. Could easily contain small mistakes!}
-By definition $\sum_{r\in\mathcal{R}} P(r, q) \geq P(r,q)$ and therefore each term must be non-negative. For any $P(r,q) > 0$ then, by \cref{eq:pr}, $P(q) - \log P(r,q) = 0$ and hence $P(q) = P(r,q)$. Consequently, only one value of $r$ can be positive, i.e. $P(r|q) = 1 \vee P(r|q) = 0$. In other words, $R$ is a deterministic function of $Q$ when the conditional information is $0$. 
-\end{proof}
 
-Maximising information involves the same problem in the opposite direction. Since $I(R;Q) = I(Q; R) = H(Q) - H(Q|R) = H(R) - H(R|Q)$, $I$ is maximal when both $H(Q|R)=H(R|Q)=0$ and hence, $I(Q;R)=H(R)=H(Q)$ and the function describing the system is deterministic and bijective. This is extremely important as it defines precisely the optimal solution to any eye processing system as the one that deterministically maps one distinct input to one distinct output.
+\begin{definition}[Periodic functions]
+A function $f: A \rightarrow B$ is said to be periodic if, for some $P\in A$, $\forall x\in A: f(x+P) = f(x)$.
+\end{definition}
 
-\paragraph{Iris recognition}
-Using the definition of an eye information system, iris recognition can be defined as the task of determining the probability of two iris codes $R^a$ and $R^b$ originating from the same source signals $Q^a = Q^b$ or different source signals $Q^a\neq Q^b$. Iris code is here used as a general term to cover any signal used for iris comparison. The probabilities are defined as $P(Q^a\neq Q^b|R^a, R^b)$, $P(Q^a\neq Q^b|R^a, R^b)$ and are determined by the comparison algorithm used. These are typically inferred by creating a distance metric $S = h(R^a, R^b)$ which is used for estimating the proxy distributions $P(S|Q^a\neq Q^b)$ or $P(S|Q^a\neq Q^b)$. In the most traditional case, iris recognition acceptance is performed by failing a statistical test of significance, i.e. determining that $P(S|Q^a\neq Q^b)$ is extremely unlikely. This was first proposed by Daugman (REF) and can be reformulated as
+\begin{definition}[Fourier series]
+Any periodic function 
+\begin{equation}
+    s_N(x) = \frac{a_0}{2} + \sum_{n=1}^\infty c_n \cdot e^{i\frac{2\pi n x}{P}},
+\end{equation}
+
+\end{definition}
+
+The Fourier Transform, or rather its inverse, is a generalisation of the concept of approximating functions using sums of sines and cosines which does not require the source function to be periodic. The regular Fourier Transform allows decomposition of an arbitrary function into its frequency constituents. It is an integral transform defined as
+
+\begin{align*}
+	\hat{f}(\xi) = \int_{-\infty}^{\infty} f(x) e^{-2\pi i x\xi}dx,
+\end{align*}
+where $\xi$ is a given frequency. For example, the Fourier transform of a \todo{example function}. The complex exponential $e^{-2\pi i x\xi}$ is by definition periodic (\todo{example image}) and as such the Fourier transform can be understood as measuring the degree to which the origin function responds to a specific period.
+
+The Fourier Transform is an incredibly powerful tool that allows decomposition of functions into their frequency components. This can be extremely useful in \todo{add talk}
+
+
+
+\subsection{Image filters}
+Many image modifications are more easily analysable and applicable in the frequency domain. 
+
+\subsubsection{Convolution}
+
+\begin{definition}[Convolution]
+The convolution operation is denoted by the symbol $*$. For functions $f$ and $g$, it is defined as 
+\begin{equation}
+    (f*g)(t) = \int_{-\infty}^\infty f(\tau)g(t-\tau)d_\tau
+\end{equation}
+\end{definition}
+
+\begin{equation}
+    \widehat{(f*g)}(t) = k\hat{f}(t)\hat{g}(t)
+\end{equation}
+
+Convolution for images:
 \begin{align}
-\begin{aligned}
-    h_0: & \quad s = h(R^a, R^b) &&\sim  P_{S|\hat{Q}^a\neq \hat{Q}^b}\\
-    h_1: & \quad s && \sim  P_{S|\hat{Q}^a = \hat{Q}^b}.
-\end{aligned}
+    \hat{I}(x, y) = \sum_{i=x-s}^{x+s}\sum_{j=y-s}^{y+s} I(x,y)k(i,j),
 \end{align}
 
-In terms of the proposed eye information model, these distributions depend only on the internal system noise. 
+\subsubsection{Localising frequency}
+The Fourier Transform is not localised and therefore does reveal any spatial understanding of how frequencies are distributed in a given function. Knowing this is, however, extremely useful in image analysis. Spatially localised frequency analysis is the basis of edge and blob detection in images and is also used in feature-detection and texture analysis applications such as iris recognition. Several approaches exist to localise frequency responses but the most important method, and the one relevant to this thesis for both iris recognition and analysis of iris obfuscation, is the wavelet transform.
 
-We assume the original iris distribution to be uniform, i.e $P(Q)=1/N$ where $N$ is the total population. Given zero noise, $H(R|Q)=0$ and $H(R)=H(Q)$, $P(R)$ must be uniform on its support. As a result, $S$ which is defined to be $0$ when $R^a = R^b$, must have $P(S=0|Q^a = Q^b)=1$ and $P(S>0|Q^a \neq Q^b)=1$ since the original signals completely determine $S$. 
+The wavelet transform is, just as the Fourier Transform, an invertible transform but it \todo{definition}.
 
-Because $S$ is bounded (here assumed to be normalised), an increase in noise $H(R|Q)$ increases the variance of $S$. Formally, as the noise approaches the maximum entropy of $R$, given by $M$, the distribution of $P(S)$ is
+Wavelets act as bandpass filters. This is clear when they are viewed in the Fourier domain (FIGREF). Compared to the Gaussian filter (left) and the high-pass filter (right), the wavelet filter (Gabor function) is ....
+
+A Gabor wavelet is simply the product of a complex sinusoidal function (also called complex exponentials) and a complex Gaussian function. Here, we define it in a two-dimensional variation with adjustable frequency $\omega$, angle $\theta$, and standard deviation $\sigma$ of the envelope:
 \begin{align}
-\lim_{H(R|Q)\rightarrow M} P(S) = U(0, 1),
+    g(x,y)_{\omega, \theta, \sigma} &= \frac{1}{\sigma\sqrt{\pi}} e^{-\frac{\hat{x}^2+\hat{y}^2}{2\sigma^2}} e^{i 2\pi \hat{x}\omega}\\
+    \hat{x} &= x\cos\theta + y\sin\theta \\
+    \hat{y} &= -x\sin\theta + y\cos\theta.
 \end{align}
-where $U(0, 1)$ denotes a discrete distribution of $M$ possible outcomes normalised to values in the $]0, 1[$ range. In the opposite direction, information may be lost due to low resolution image capture or bad decoding methods. This is represented by $I(R;Q)$. The relation in \autoref{eq:entropy-law} shows that mutual information limits the amount of information transmitted through the system. The limit is
-\begin{align}
-\lim_{I(R;Q)\rightarrow 0} P(S) = 0.
-\end{align}
-
-In other words, iris recognition systems are limited by their ability to transmit the iris pattern without introducing noise or capturing too little detail.
-
-\paragraph{Gaze estimation}
-%Gaze is defined as either the direction or point of visual attention of a given subject. This property is by definition at least partially subjective, as the point of attention does not always coincide with the fovea, but instead is at least partially controllable by the subject (REF). The physical encoding of gaze is then, at least when only observing the eye's immediate position and orientation, inherently probabilistic. This is captured by the model as the distribution $P(\hat{Q}|Q_{gaze})$, if the encoding function is split between physical encoding and image capture such that $I=f_{capture}(\hat{Q})$ and $\hat{Q}=f_{physical}(Q_{gaze}, \dots)$. 
-
-%Each additional step in a given gaze estimation system introduces some amount of additional noise given by its imperfections. Robust gaze estimation can therefore be defined as transformations and decoders that have low noise-rates for large variations in signal distributions. Consequently, a non-robust system is characterised by having low noise-rates only for a narrow subset of input signals. 
-
-The definition of an ideal gaze estimation system is one that minimises the conditional information $H(R^{gaze}|Q^{gaze})$ while maximising the entropy $H(R^{gaze})$. Since $Q^{gaze}$ represents only the distribution of a single gaze signal, we may add that the capacity of $f^{gaze}_d \circ f_p^{(n)} \circ \dots \circ f_p^{(1)} \circ f_e$ should have $\mathcal{C} = \max H(R^{gaze})$, i.e. the capacity should be equal to the maximum entropy of a specific gaze point. For example, if the gaze is described as two $16$-bit integers, the capacity should be $32$ bits.
-
-This goal is reflected by the typical least squares approach to optimising the gaze decoder function $f^{gaze}_d$. In the notation of an eye processing model, gaze function optimisation is typically expressed
-\begin{align}
-    \min \mathbb{E}_{q}\left[\norm{\hat{Q}^{gaze} - \left(f^{gaze}_d \circ f_p^{(n)} \circ \dots \circ f_p^{(1)} \circ f_e\right)(Q^{gaze})}_2\right],
-\end{align}
-where $\hat{Q}^{gaze}$ is an approximation of $Q^{gaze}$ based on the assumption that the subject looked at a known fixed point at a certain point in time.
-
-
-

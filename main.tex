@@ -1,5 +1,6 @@
 \documentclass[11pt, a4paper, twoside]{report}
 
+\usepackage{import}
 
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
@@ -16,7 +17,7 @@
     citestyle=authoryear-icomp
 ]{biblatex}
 \addbibresource{thesis.bib}
-\addbibresource{article.bib}
+\addbibresource{Iris-Information-Obfuscation/references.bib}
 
 \DeclareLabeldate[online]{%
   \field{date}
@@ -28,6 +29,7 @@
 
 \usepackage{hyperref}
 \usepackage{cleveref}
+\usepackage{csquotes}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage[toc, acronym]{glossaries}
@@ -38,6 +40,7 @@
 \usepackage{quotchap}
 \usepackage{tikz}
 \usepackage{pgfplots}
+\usepackage{wrapfig}
 \pgfplotsset{compat=1.16}
 \usetikzlibrary{shapes.geometric, arrows}
 
@@ -86,6 +89,7 @@ BoldItalicFont={*-BoldItalic}]
 
 
 \include{chapters/article}
+\include{article}
 
 \include{chapters/method}
 
