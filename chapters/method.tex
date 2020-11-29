@@ -1,29 +1,29 @@
-\chapter{Method}
+\chapter{Method details}
 This chapter presents additional details on the experimental work performed as part of this thesis. It builds directly on the material presented in the article, which describes only the most relevant and critical details. Additional results and experiments are presented in the next chapter.
 
 The primary contribution of this work in terms of implemented software, is the platform designed and created for the experimental work presented in the article. The platform consists of tools for optimisation, entropy calculations, iris recognition, gaze estimation as well as a platform for defining, running, and analysing iris obfuscation experiments. 
 
 
 \section{Implementation details}
-This section presents the scope and important details of the software systems implemented to achieve the goals...
+This section presents the scope and important details of the software systems implemented for the thesis. One of the goals of the thesis is to create an experimental platform that can easily be extended and adapted for future research.
 
 FIGREF shows a high-level diagram of the provided software. 
 
 T
 
 
-\subsection{Optimisation engine}
-In order to support different approaches to optimisation, the component has been designed such that any form of optimisation may be implemented. 
+\subsection{Optimisation engine}\label{sec:detail-opt}
+The parameter experiments presented in the article are driven by the optimisation engine component. Its purpose is to allow implementation of a number of different optimisation methods.
 
-The MultiObjectiveOptimizer class expects an Objective and produces a set of results by calling its run method. The run method is implemented differently for each subclass to support different types of optimisation. The NaiveMultiObjectiveOptimizer does not use feedback for determining parameters for the next iteration and instead relies on sampling based parameter selection - this is the class used in the experiments. Additionally, a PopulationMultiObjectiveOptimizer is an implementation of the so called \textit{vector evaluated genetic algorithm}, which uses population strategies to combine and select parameters. The method is discussed in further detail in SECREF, where its possible uses for future work is considered.
+The MultiObjectiveOptimizer class expects an Objective and produces a set of results by calling its run method. The run method is implemented differently for each subclass to support different types of optimisation. The NaiveMultiObjectiveOptimizer does not use feedback for determining parameters for the next iteration and instead relies on sampling based parameter selection - this is the class used in the experiments. Additionally, a PopulationMultiObjectiveOptimizer is an implementation of the so called \textit{vector evaluated genetic algorithm} \parencite{kochenderfer2019algorithms}, which uses population strategies to combine and select parameters. The method is discussed in further detail in \cref{sec:future-optim}, where its possible uses for future work is considered.
 
 Each optimiser has exactly one Objective. The abstract Objective class only has a single sub-class ObfuscationObjective for now but additional ones would be necessary for other optimisation methods or other optimisation tasks. The purpose of the Objective class is to calculate a set of Metrics given a set of parameters. In ObfuscationObjective this is done as described in the article by using different datasets for different metrics. 
 
 Specifically, the objective object is initialised with a pool of datasets divided into three categories: Iris datasets, Gaze datasets, and pupil centre datasets. As seen on the class diagram, this terminology arises from the fact that the gaze datasets are subdivided. The objective can be initialised with any number of different metrics provided as objects. Calling the \emph{eval} function results in the metrics being calculated for a number of samples drawn from the datasets. The sample size is determined at the moment of initialisation.
 
-Results are recorded in a special Logger object, which wraps a dictionary and provides convenient methods for accessing the data.
+Results are recorded in a special Logger object, which wraps a dictionary and provides convenient methods for accessing the data. In terms of the optimisation experiment described in the article, each obfuscation method represents one MultiObjectiveOptimizer instance.
 
-\subsection{Interactive tools}
+\subsection{Experiment platform and interactive tools}
 \begin{figure}
 	\begin{subfigure}{0.3\textwidth}\centering
 		\includegraphics[width=1\linewidth]{figures/labs/EntropyLab}
@@ -58,9 +58,11 @@ Results are recorded in a special Logger object, which wraps a dictionary and pr
 	\caption{Screenshots showing the individual interactive tools. The code is, of course, included with the thesis submission as well.}\label{fig:tools}
 \end{figure}
 
-In terms of the optimisation experiment described in the article, each obfuscation method represents one MultiObjectiveOptimizer instance. To make experimentation and repeatability easier, a number of interactive tools are created using StreamLit which is a Python library for creating data-rich, interactive, web applications.
+The experimental platform is bound together by a number of data-formats describing the precise configurations used for each experiment. This allows easy reproducibility and comparison between methods. The configuration files are modified either manually or by using one of the six interactive tools developed for experimentation and result analysis. 
 
-Six different interactive tools were created - some for experimenting with 
+The interactive tools are either self-contained and created for experimentation with the approaches used or they are meant as configuration and analysis tools for experimentation.
+
+Six different interactive tools were created, specifically
 \begin{description}
 	\item [EntropyLab] Tool for experimenting with image-based entropy measurements and their distributions.
 	\item [GazeLab] Tool for experimenting with gaze estimation parameters and evaluating performance.
@@ -85,33 +87,40 @@ For a set of pupil-glint vectors $\{\mathbf{x}^1, \mathbf{x}^2, \dots, \mathbf{x
 \end{equation}
 where $a$-$e$ are the parameters. A solution could be found using $12$ calibration points, but the method of least squares allows us to minimise the impact of outliers.
 
-Several pupil detectors were tested, of which DeepEye (REF) outperformed the others. Specifically, I tested a home-made BLOB based detector and the ElSE and ExCuSE detectors as well (REFS), although they all failed on some easy samples as shown (FIGREF). DeepEye is a neural network and .....
-% TODO: Skriv også om deepeye i metode...
+Several pupil detectors were tested, of which DeepEye (REF) outperformed the others. Specifically, I tested a home-made BLOB based detector and the ElSE and ExCuSE detectors as well (REFS).
 
 \subsection{Iris recognition}
-The iris recognition implementation is an attempt at closely matching the design of the original algorithm created by Daugman (REF) and which is generally still used for baseline comparisons today. In improved versions, Daugman's method acheives accuracies of XX on a non-public dataset. The replica only achieves XX on the CASIA IV dataset though it should be mentioned that this is very favourable compared to other replicas proposed in various studies (REF). Additionally the test dataset, CASIA IV, only contains $2639$ samples from $xx$ subjects which limits the precision of the result.
-
-The reasons for implementing the method from scratch are twofold. By far the most important was that no accurate implementation was available with support for Python. The OSIRIS project (REF) has seemingly disappeared and several others including (REFS) did not use the original technique. A very thorough implementation of multiple iris recognition algorithms a available in a library (REF) but only in c++. Writing a Python interface was outside the scope of this thesis. Secondly, implementing the method from scratch provides valuable experience which is useful when trying to understand how the iris signal is communicated and decoded from its image representation.
 
 
-Daugman's method is based on the use of wavelets to detect the phase of the iris at a number of frequencies and angles. The minimum wavelength chosen for the filters was 3 pixels in order to avoid artifacting affecting the outcome.
+%Compared to similar implementations, it compares similarly, with an equal error rate of $xx$. Daugman's original implementation 
+
+
+%The iris recognition implementation is an attempt at closely matching the design of the original algorithm created by Daugman (REF) and which is generally still used for baseline comparisons today. In improved versions, Daugman's method acheives accuracies of XX on a non-public dataset. The replica only achieves XX on the CASIA IV dataset though it should be mentioned that this is very favourable compared to other replicas proposed in various studies (REF). Additionally the test dataset, CASIA IV, only contains $2639$ samples from $xx$ subjects which limits the precision of the result.
+
+The iris implementation used in the experiments has been implemented from scratch. There are two reasons for this choice. By far the most important was that no accurate implementation was available with support for Python. The source code for the OSIRIS project \parencite{osiris} has seemingly disappeared and several others including \parencite{rec1, rec2, rec3} did not use the original technique. Secondly, implementing the method from scratch provides valuable experience which is useful when trying to understand how the iris signal is communicated and decoded from its image representation.
+
+% A very thorough implementation of multiple iris recognition algorithms are available in a library (REF) but only in c++. Writing a Python interface was outside the scope of this thesis.
+
+
+Daugman's method is based on the use of wavelets to detect the phase of the iris at a number of frequencies and angles. The minimum wavelength chosen for the filters was 3 pixels in order to avoid artefacts affecting the outcome. This minimum is limited by the Nyquist frequency (REF) ...
 
 \begin{figure}
     \begin{subfigure}{0.5\linewidth}
         \centering
         \includegraphics[width=0.6\linewidth]{figures/polar-image.pdf}
         \caption{The pupil and iris circumference ellipses define a polar coordinate system.}
-        \label{fig:polar-method}
+        \label{fig:polar-method-a}
     \end{subfigure}
     \begin{subfigure}{0.5\linewidth}
         \centering
         \includegraphics[width=0.6\linewidth]{figures/polar-method.pdf}
         \caption{Individual pixels in the polar coordinate system covers many actual pixels in the original cartesian space. The effect is amplified in the figure.}
-        \label{fig:polar-method}
+        \label{fig:polar-method-b}
     \end{subfigure}
+    \caption{}\label{fig:polar-method}
 \end{figure}
 
-The polar sampling method uses a particularly interesting technique. As shown in (FIGREF), the pseudo-polar coordinate system results in pixels that overlap several of the original image's pixels in strange ways. A possible solution would be to radically increase the polar resolution and use billinear sampling or similar for interpolation (REF). 
+The polar sampling method uses a particularly interesting technique. As shown in \cref{fig:polar-method}, the pseudo-polar coordinate system results in pixels that overlap several of the original image's pixels in strange ways. A possible solution would be to radically increase the polar resolution and use bilinear sampling or similar for interpolation. 
 
 Due to the relatively slow phase calculation implementation however, I chose to keep the polar resolution low and instead opted to use a simple probabilistic sampling technique. If we denote the polar pixel region as a set $S$, each pixel in the cartesian image coordinate system is similarly sets $C_1, \dots, C_n$. The ideal pixel value at that coordinate is then:
 \begin{equation}
@@ -136,11 +145,12 @@ Iris obfuscation has at least two objectives, one for the gaze accuracy and one 
 \begin{align}
 	J^{\mathcal{O}}(I) = w_{gaze}J_{gaze}^{\mathcal{O}}(I) +  w_{iris}J_{iris}^{\mathcal{O}}(I),
 \end{align}
-as originally suggested by my supervisor in (REF). This approach may be suitable when sufficient knowledge about the problem makes it possible to define reasonable values for the weights. It does, however, assume prior knowledge of the relative importance of the objectives. 
+as originally suggested by my supervisor in \cite{proposal}. This approach may be suitable when sufficient knowledge about the problem makes it possible to define reasonable values for the weights. It does, however, assume prior knowledge of the relative importance of the objectives. 
 
-Instead, this study focuses on exploring the trade-offs between various objectives over a large range of possible parameter values for each obfuscation method. In the article this is done using grid-search due to the relatively limited search space. I also experimented with a population-based method for combining multiple objectives which preserves (something).
+Instead, this thesis focuses on exploring the trade-offs between various objectives over a large range of possible parameter values for each obfuscation method. In the article this is done using grid-search due to the relatively limited search space. I also experimented with a population-based method for combining multiple objectives which preserves (something).
 
-A central idea in using these explorative methods is \textit{pareto optimality}. Pareto optimality is based on the concept that even when objectives are not comparable, it is possible to determine an ordering of the optimality of points. Figure (REF) shows an example in two dimensions. The points marked in blue are objectively better than any of the black points. Being objectively better here means that it is at least as good in every dimension and better in at least one. This is called dominance - the full definition is shown in \cref{def:dominance}. Points that are not dominated by any other point is \textit{Pareto optimal} (\Cref{def:p-optimal}). The subset of all such points of a given set is called the \textit{Pareto frontier} (\Cref{def:p-frontier}). In this example, the blue points define the Pareto Frontier.
+\subsection{Pareto optimality}
+A central idea in using these explorative methods is \textit{pareto optimality}. Pareto optimality is based on the concept that even when objectives are not comparable, it is possible to determine an ordering of the optimality of points. Figure (REF)\todo{figure} shows an example in two dimensions. The points marked in blue are objectively better than any of the black points. Being objectively better here means that it is at least as good in every dimension and better in at least one. This is called dominance - the full definition is shown in \cref{def:dominance}. Points that are not dominated by any other point is \textit{Pareto optimal} (\Cref{def:p-optimal}). The subset of all such points of a given set is called the \textit{Pareto frontier} (\Cref{def:p-frontier}). In this example, the blue points define the Pareto Frontier.
 
 \begin{definition}[Dominance]\label{def:dominance}
 Given points $\mathbf{x}$, $\mathbf{x'}$ and an objective function $f$ with domain $\mathbb{m}$, $\mathbf{x}$ dominates $\mathbf{x'}$ if and only if
@@ -162,7 +172,20 @@ A point $\mathbf{x}$ in set $S$ is Pareto optimal if
 The subset of all Pareto optimal points in a given set.
 \end{definition}
 
-Defining a Pareto frontier for a vector-valued objective function compresses the relevant parameter under consideration to a surface. This means that 
+\subsection{In iris obfuscation}
+For iris obfuscation, the Pareto frontier of the gaze metric (\cref{eq:ob_gaze}) and iris code similarity metric (\cref{eq:ob_iris}) defines the boundary between 
+
+
+
+The optimisation goal used in the article (\cref{eq:obf-goal}) can be generalised to 
+\begin{align}
+	\begin{aligned}
+    \max & J_{obf}(I, I^*)\\
+    \min & \frac{J_{gaze}(I)}{J_{gaze}(I^*)},
+\end{aligned}
+\end{align}
+
+for unconstrained optimisation. This is problematic since there is no relation valuing the relative importance of the two goals
 
 \begin{figure}
     \centering
@@ -204,9 +227,9 @@ The fundamental model is that each image can be represented by an unknown distri
 \end{align}
 where $\delta_{a, b}$ is the Dirac delta function. The downside to this approach is that no correlations between pixels are considered even though they clearly exist. For use in obfuscation measurement, this is problematic since the iris recognition methods use texture and not direct pixel intensities for detection. 
 
-In the most general terms, the distinct features of an iris pattern represents differences in the amplitude and phase of different frequencies. Many iris algorithms of the Daugman type use spatial phase responses to calculate a robust iris code. These traditional methods generally use some form of wavelet transform to separate spatial frequency-responses (REFS). The convolutional neural-network based methods likely learn similar approaches as they have been shown to learn typical bandpass-filters like the wavelets used by Daugman (REF). 
+In the most general terms, the distinct features of an iris pattern represents differences in the amplitude and phase of different frequencies. Many iris algorithms of the Daugman type use spatial phase responses to calculate a robust iris code. These traditional methods generally use some form of wavelet transform to separate spatial frequency-responses \parencite{daugman2007new}. %The convolutional neural-network based methods likely learn similar approaches as they have been shown to learn typical bandpass-filters like the wavelets used by Daugman (REF). 
 
-The image derivative, defined by its two partials, has excellent properties for measuring image texture complexity. The image derivative retains all information necessary to reconstruct the original image and is therefore still a valid upper bound on information measures (REF). By defining $P_{img}$ as a joint distribution of the partial derivatives of the image
+The image derivative, defined by its two partials, has excellent properties for measuring image texture complexity. The image derivative retains all information necessary to reconstruct the original image and is therefore still a valid upper bound on information measures. By defining $P_{img}$ as a joint distribution of the partial derivatives of the image
 \begin{align}
     P(dx=i, dy=j) = \sum_{x\in\mathcal{X}y\in\mathcal{Y}} \delta_{i, {I_{\Delta x}}_{x,y}} \delta_{j, {I_{\Delta y}}_{x,y}},
 \end{align}
@@ -224,6 +247,6 @@ Additionally, we also define joint distributions on convolutions with complex Ga
     \caption{Shows effect of applying the proposed filters. The heat-maps show the corresponding gradient histogram.}
     \label{fig:filters}
 \end{figure}
-Specifically, one of the previous studies tested a Gaussian filter (and optical defocus) (REF) for obfuscation based on the assumption that the lowest frequency wavelength of the pupil edge would be enough to enable robust gaze estimation. The problem with the Gaussian filter is that it is a low-pass filter, i.e. it removes high-frequency components. Since sharp edges are only sharp because of these, a Gaussian filter makes images look blurry and unsharp as a result. The effect on the image in (FIG) is shown in (FIG), where a Gaussian filter with $\sigma=5$ has been applied. Clearly, the gradient at the edge has been smoothed considerably. The reason the study still reports favourable results is that the gaze-estimation algorithm is likely robust to at least some degree of edge blurring.
+Specifically, one of the previous studies tested a Gaussian filter (and optical defocus) \parencite{BRENDAN_BLUR} for obfuscation based on the assumption that the lowest frequency wavelength of the pupil edge would be enough to enable robust gaze estimation. The problem with the Gaussian filter is that it is a low-pass filter, i.e. it removes high-frequency components. Since sharp edges are only sharp because of these, a Gaussian filter makes images look blurry and unsharp as a result. The effect on the image in (FIG) is shown in (FIG)\todo{do it}, where a Gaussian filter with $\sigma=5$ has been applied. Clearly, the gradient at the edge has been smoothed considerably. The reason the study still reports favourable results is that the gaze-estimation algorithm is likely robust to at least some degree of edge blurring.
 
 A smarter approach is to consider not just the spatial neighbourhood but the intensity as well. 

@@ -1,33 +1,56 @@
 \chapter{Future work}
+As suggested throughout the thesis, the EIP model and the surrounding work is meant to be an offset for future work in the area of sensitive information removal in eye-tracking. The large number of personally sensitive properties eye-tracking data potentially reveals is a problem that needs to be investigated further. This chapter presents my thoughts on the most critical issues and what solutions might be achievable using the approach presented here.
 
-Neural networks are just differentiable functions which are optimised using stochastic gradient descent. The stochastic modifier signifies, that instead of determining the true gradient, a smaller sample is used instead, resulting in realistic time-frames for optimisation. Although neural networks are often described by layers and neurons, this terminology is all a combination of the history of their creation and useful architectural terms. In general, we may model any function as long as it can be differentiated.
 
-For iris obfuscation, convolutional neural networks are of special interest, since they are simply a stack of linear functions with non-linear activations connected together. Thus they can be applied in the embedded hardware domain if constructed suitably.
 
-\subsection{Neural network basics}
-A neural network is defined by a function $f$ and an associated cost function $J$. 
+\section{Iris obfuscation}
+Iris-obfuscation is, as mentioned, a good place for foundational research due to the fact that it enables other discovered properties to be linked to an identity with extremely high precision given high-resolution data as is typically recorded with head-mounted eye-trackers. The results presented shows that the proposed model combining blurring and noise generation might be a promising solution. It is however extremely important, that these and other methods are studied in even greater detail to provide better guarantees for their security. 
 
-\subsection{Construction}
-Not possible.....  In the proposed embedded domain, resources are generally scarce. Therefore, the obfuscation process would ideally work locally and thus not require memory to store a whole image. This also increases claims of security if the original image is never present in contiguous memory.
-
-\subsection{Training}
-I have a thesis that a complete gaze estimation pipeline trained for maximal gaze accuracy and minimal mutual information should be able to achieve close to or better performance than SOA. My main argument is that noise supression is necessary for gaze estimation and that conjointly trained obfuscation and gaze systems would result in obfuscation filters that retain important information. For example, some gaze methods use the iris texture for accurate positioning. A CNN filter could potentially retain some form of textural information while ...
-
-From this perspective, a learning iris obfuscation experiment is as much about creating effective obfuscation methods as it is about discovering possibilities for gaze estimation under a specific constraint.
-
+\subsection{Differential privacy}
+As mentioned in the article, differential privacy is not a suitable measure for this application because it is too strict in this application. Specifically, differential privacy is simply a measure of how much a random function impacts the predictability of changing a single element in a set of data points, e.g. an image. Formally, a random function $\mathcal{K}$ is $\epsilon$-differentially private if
 \begin{align}
-    J(\theta) = \frac{1}{2}\mathbb{E}_{x,y\sim \hat{p}_{data}} ||\mathbf{y}-f(x;\theta)||^2
+	P[\mathcal{K}(D_1)\in S] \leq \exp{\epsilon} P[\mathcal{K}(D_2)\in S],
 \end{align}
+for all subsets $S$ of the image of $\mathcal{K}$ and all datasets $D_1$, $D_2$ that differ in at most one element \parencite{dwork2006differential}. In other words, a differentially private function decreases the output's dependence on individual data points since this dependence can be used to infer the original data points.
 
+Differential privacy measures for images have been proposed by \parencite{fan2018image}. Importantly, their extension from single pixel changes to neighbourhoods, come with a proportional increase in $\epsilon$ for the same amount of randomness, i.e. for a neighbourhood of $n$ pixels, the privacy should be $\epsilon/n$ to achieve the same level of protection as when a single element is changed. The solution presented in this study suggests an aggressive downsampling using averaging to achieve reasonable levels of noise. Specifically, for an image with pixel intensities in the range $0-255$, and using laplacian noise, the scale parameter is $\frac{255n}{b^2}$ where $b$ is the side length of grid cells defining regions to be averaged. Since laplacian noise has a variance of $2s^2$ where $s$ is the scale, even a low-resolution image of $100\times 10$ pixels (the size used for polar iris images in this work) would require laplacian noise with a variance of $\approx 130\times 10^9$ thus rendering the image practically unusable.
+
+The method proposed in \parencite{BRENDAN_SNOW} does, however, use a weaker form of differential privacy allowing an extra constant term $\delta$ which signifies a probability of leaking information. They prove that $\delta$ has a maximum of $0.5$ for the snow method which means that each pixel has $50\%$ chance of a leak. However, as presented in \cref{sec:methods}, the method can easily be defeated if multiple samples are available. Additionally, even with a single sample, the method shows only moderate effectiveness at preventing recognition with high precision at low recall values. 
+
+It is therefore my argument, that differential privacy is not the best fit for proving privacy for this application. It is too strict since not all pixels need to be unidentifiable to prevent iris recognition. They just need to contain too little information from the original iris pattern to make accurate identification possible.
+
+\subsection{Finding strict boundaries}
+I instead propose to continue pursuing information-related measures as a basis for proving iris obfuscation methods secure. A reasonable starting point is to use the mutual information as well as its ratio to the total entropy of the iris pattern in the image. Alternatively, the capacity measure can be used to define theoretical upper bounds that are not dependent on specific data.
+
+The histograms used in these experiments use only 16 bins per dimension, which itself removes a lot of information. The resulting values are therefore not representative of the true entropy of the images. Since this is limited by the number of samples, using a whole dataset as a single signal to estimate the distribution will make it possible to more accurately approximate the true distribution. Other approaches such as kernel density estimation might be used as well.
+
+\subsection{Efficient parameter optimisation}\label{sec:future-optim}
+As mentioned in \cref{sec:detail-opt}, a vector evaluated genetic algorithm has been implemented as part of the optimisation system. A vector evaluated genetic algorithm is a simple variation of a traditional genetic algorithm with a selection criteria, crossover, and mutation steps as defined in \parencite[148, 222]{kochenderfer2019algorithms}. Instead of selecting a number of parents based on a single selection criteria, the vector algorithm divides the population into subpopulations which are each optimised (selection) according to a specific output feature. The result is that all measures are considered. 
+
+Due to time constraints and the relative effectiveness of the brute-force grid-search, this implementation was never adequately tested but might be useful, especially for methods with higher numbers of parameters. The Comb and Comb-reverse methods are interesting candidates for this approach due to them having three parameters.
+
+\subsection{Learning iris obfuscation}
+Applying neural network methods to learn the obfuscation functions from data has two purposes. (1) Given the success of neural networks in other areas of computer vision, it is reasonable to expect that an obfuscation method trained from data would be better adapted to the task than the methods presented here. (2) The learned models can be analysed to better understand how iris obfuscation can work.
+
+\subsubsection{A possible model}
+One of the original goals for this thesis was to create a simple CNN model for iris obfuscation. This section contains my thoughts for a definition. Neural networks are an ideal model for this application since they allow optimisation of arbitrary functions. This means that complex priors and methods for measuring cost can be implemented easily. 
+%Neural networks are just differentiable functions which are optimised using stochastic gradient descent. The stochastic modifier signifies, that instead of determining the true gradient, a smaller sample is used instead, resulting in realistic time-frames for optimisation. Although neural networks are often described by layers and neurons, this terminology is all a combination of the history of their creation and useful architectural terms. In general, we may model any function as long as it can be differentiated.
+
+For iris obfuscation, an important characteristic is effectiveness since the method should work in an embedded environment either as software or hardware. Locality and depth are therefore important considerations for the design of a neural network for iris obfuscation.
+
+Because both the input and output are images, the architecture should be a fully convolutional network (FCN) which contains no linear layers. This allows the "field of view" of each pixel to be limited by the radius
 \begin{align}
-    Z_{i,j,k} = \sum_{l,m,n} V_{l,j+m-1, k+n-1}K_{i,l,m,n}
+    neigh = (k-1)/2*L,
 \end{align}
+where $k$ is the kernel size and $L$ is the number of layers. 
 
+The gradient-based entropy measures are an ideal candidate for measuring the degree of obfuscation in an image since it is differentiable. Alternatively, neural-network based iris recognition models may be used \parencite{nguyen2017iris, gangwar2016deepirisnet} but they introduce method-specific biases that may or may not be acceptable. Additionally, the measures presented in the article are shown to correlate highly with the iris recognition accuracy.
+
+Redefining the measures as differentiable functions require a histogram binning method that is continuous. A method proposed in \parencite{avi2019hue} is extended to be usable for multivariate distributions. The traditional histogram counting function is defined as
 \begin{align}
-    width = (m-1)/2*L
+	h(v) = \sum_{x\in I} \delta_{I_x, v},
 \end{align}
-
-\subsubsection{Differentiable histogram}
+which is not continuous. Instead, a function based on...
 
 \begin{align}
     \Pi_k(z) = \sigma(\frac{z-\mu_k+L/2}{W}) - \sigma(\frac{z-\mu_k-L/2}{W})
@@ -62,3 +85,23 @@ From this perspective, a learning iris obfuscation experiment is as much about c
     \caption{Caption}
     \label{fig:my_label}
 \end{figure}
+
+
+\begin{align}
+    J(\theta) = \frac{1}{2}\mathbb{E}_{x,y\sim \hat{p}_{data}} ||\mathbf{y}-f(x;\theta)||^2
+\end{align}
+
+\begin{align}
+    Z_{i,j,k} = \sum_{l,m,n} V_{l,j+m-1, k+n-1}K_{i,l,m,n}
+\end{align}
+
+
+\todo{kun hvis du kan nå det!!}
+
+\subsection{Combined training}
+I propose that training a complete gaze estimation pipeline as neural network with a dedicated iris obfuscation component is an obvious next step for exploring how the iris and gaze signal components in images might be modified in a manner that is beneficial to both iris obfuscation and gaze estimation. In other words, I suggest the possibility of improving neural-network based gaze estimation by jointly training a network for iris obfuscation and gaze estimation. Although the encoded iris is clearly indicative of the eye's position and rotation and thus usable for gaze estimation, a jointly trained method may selectively retain important features for gaze while removing noise and iris pattern information.
+
+
+
+
+
