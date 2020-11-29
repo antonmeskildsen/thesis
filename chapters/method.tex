@@ -211,42 +211,30 @@ When analysing the image as a Fourier series, two important factors stand out. F
 
 This signal analysis becomes important when considering methods for obfuscation. Our understanding of how the transformations affect different simpler signals may help us find suitable methods that are more well-suited to the application.
 
-\subsection{Measuring information in images}
-The term signal is rather abstract but is typically defined as a function that encodes or contains information of interest. Signals can be defined over temporal inputs, spatial inputs, or both. In the case of eye information processes, signals such as the captured eye images may be analysed individually as purely spatially divided signals or jointly as a time series of frames. The iris pattern in either its abstract or encoded form, is only resolved spatially while the gaze signal is usually analysed as a time-series. 
+\todo{Should this be included somewhere?}
+%\subsection{Measuring information in images}
+%The term signal is rather abstract but is typically defined as a function that encodes or contains information of interest. Signals can be defined over temporal inputs, spatial inputs, or both. In the case of eye information processes, signals such as the captured eye images may be analysed individually as purely spatially divided signals or jointly as a time series of frames. The iris pattern in either its abstract or encoded form, is only resolved spatially while the gaze signal is usually analysed as a time-series. 
 
 
 
 
-When viewed as bandlimited discrete signals of two dimensions, images can be analysed structurally through the 
+%When viewed as bandlimited discrete signals of two dimensions, images can be analysed structurally through the 
 
-To measure entropy and mutual information in images, it is necessary to formulate a method for defining the image in terms of a probability distribution. Specifically, it is necessary to define a model for the image distribution and estimate it using the image itself as data.
+%To measure entropy and mutual information in images, it is necessary to formulate a method for defining the image in terms of a probability distribution. Specifically, it is necessary to define a model for the image distribution and estimate it using the image itself as data.
 
-The fundamental model is that each image can be represented by an unknown distribution $P_{img}$ of an unknown number of random variables $X^1, \dots, X^n$. A simple model is the intensity histogram which estimates a discrete distribution of intensity values assuming that each pixel is independent of each other. It can be defined as
-\begin{align}
-    P(I=i) = \sum_{x\in\mathcal{X}y\in\mathcal{Y}} \delta_{i, I_{x,y}},
-\end{align}
-where $\delta_{a, b}$ is the Dirac delta function. The downside to this approach is that no correlations between pixels are considered even though they clearly exist. For use in obfuscation measurement, this is problematic since the iris recognition methods use texture and not direct pixel intensities for detection. 
+%The fundamental model is that each image can be represented by an unknown distribution $P_{img}$ of an unknown number of random variables $X^1, \dots, X^n$. A simple model is the intensity histogram which estimates a discrete distribution of intensity values assuming that each pixel is independent of each other. It can be defined as
+%\begin{align}
+%    P(I=i) = \sum_{x\in\mathcal{X}y\in\mathcal{Y}} \delta_{i, I_{x,y}},
+%\end{align}
+%where $\delta_{a, b}$ is the Dirac delta function. The downside to this approach is that no correlations between pixels are considered even though they clearly exist. For use in obfuscation measurement, this is problematic since the iris recognition methods use texture and not direct pixel intensities for detection. 
 
-In the most general terms, the distinct features of an iris pattern represents differences in the amplitude and phase of different frequencies. Many iris algorithms of the Daugman type use spatial phase responses to calculate a robust iris code. These traditional methods generally use some form of wavelet transform to separate spatial frequency-responses \parencite{daugman2007new}. %The convolutional neural-network based methods likely learn similar approaches as they have been shown to learn typical bandpass-filters like the wavelets used by Daugman (REF). 
+%In the most general terms, the distinct features of an iris pattern represents differences in the amplitude and phase of different frequencies. Many iris algorithms of the Daugman type use spatial phase responses to calculate a robust iris code. These traditional methods generally use some form of wavelet transform to separate spatial frequency-responses \parencite{daugman2007new}. %The convolutional neural-network based methods likely learn similar approaches as they have been shown to learn typical bandpass-filters like the wavelets used by Daugman (REF). 
 
-The image derivative, defined by its two partials, has excellent properties for measuring image texture complexity. The image derivative retains all information necessary to reconstruct the original image and is therefore still a valid upper bound on information measures. By defining $P_{img}$ as a joint distribution of the partial derivatives of the image
-\begin{align}
-    P(dx=i, dy=j) = \sum_{x\in\mathcal{X}y\in\mathcal{Y}} \delta_{i, {I_{\Delta x}}_{x,y}} \delta_{j, {I_{\Delta y}}_{x,y}},
-\end{align}
+%The image derivative, defined by its two partials, has excellent properties for measuring image texture complexity. The image derivative retains all information necessary to reconstruct the original image and is therefore still a valid upper bound on information measures. By defining $P_{img}$ as a joint distribution of the partial derivatives of the image
+%\begin{align}
+%    P(dx=i, dy=j) = \sum_{x\in\mathcal{X}y\in\mathcal{Y}} \delta_{i, {I_{\Delta x}}_{x,y}} \delta_{j, {I_{\Delta y}}_{x,y}},
+%\end{align}
 
-Additionally, we also define joint distributions on convolutions with complex Gabor wavelets. A Gabor wavelet works as a bandpass filter, i.e. it responds only to certain frequency ranges. Defining a joint distribution over the Gabor response of a particular filter makes it possible to measure the entropy in certain frequency ranges which further... By definition however, a bandpass filter does not retain all the information in the original signal and can therefore not be used for definition of upper bounds.
-
-
+%Additionally, we also define joint distributions on convolutions with complex Gabor wavelets. A Gabor wavelet works as a bandpass filter, i.e. it responds only to certain frequency ranges. Defining a joint distribution over the Gabor response of a particular filter makes it possible to measure the entropy in certain frequency ranges which further... By definition however, a bandpass filter does not retain all the information in the original signal and can therefore not be used for definition of upper bounds.
 
 
-\subsubsection{Filters}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{figures/filter_effect.pdf}
-    \caption{Shows effect of applying the proposed filters. The heat-maps show the corresponding gradient histogram.}
-    \label{fig:filters}
-\end{figure}
-Specifically, one of the previous studies tested a Gaussian filter (and optical defocus) \parencite{BRENDAN_BLUR} for obfuscation based on the assumption that the lowest frequency wavelength of the pupil edge would be enough to enable robust gaze estimation. The problem with the Gaussian filter is that it is a low-pass filter, i.e. it removes high-frequency components. Since sharp edges are only sharp because of these, a Gaussian filter makes images look blurry and unsharp as a result. The effect on the image in (FIG) is shown in (FIG)\todo{do it}, where a Gaussian filter with $\sigma=5$ has been applied. Clearly, the gradient at the edge has been smoothed considerably. The reason the study still reports favourable results is that the gaze-estimation algorithm is likely robust to at least some degree of edge blurring.
-
-A smarter approach is to consider not just the spatial neighbourhood but the intensity as well. 

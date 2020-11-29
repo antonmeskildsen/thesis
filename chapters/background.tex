@@ -1,23 +1,56 @@
 \chapter{Eye information}
-This chapter provides an introduction to eye-tracking systems and their uses as well as what constitutes sensitive information in eye tracking. 
+This chapter provides a short introduction to the field eye-tracking including important anatomical information on the human eye, a general overview of what constitutes eye-tracking and what approaches are used. The final section provides an overview of how eye-tracking is used and what sensitive information is available. First, however, we define sensitive information
 
-I define an \gls{eye-system} as a system which attempts decoding of human properties through use of human eye images. Any such system must overcome 
+\section{Privacy and sensitive information}
+Privacy is informally understood as the ability to hide information relating to your person from others. Sensitive information is thus the properties that cannot be shared freely without ethical and legal implications. The following definition is used:
+\begin{definition}[Sensitive information] 
+	is any information related to a person that can be differentiated from others. This definition is a paraphrasing of the GDPR-equivalent.
+\end{definition}
+
+Privacy is a measure of how secure a given method is at preventing that the information is shared. In the context of this thesis, privacy specifically means that the probability that an attacker can recover a sensitive property is below a certain threshold.
+
+
+
+
+ %Encryption methods typically provide probabilistic guarantees that are so extreme that they are considered unbreakable (REF). These are however not useful in all situations.
+
+
+
+
+
+
+ 
+ 
+
+%\begin{displayquote}
+%No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.	
+%\end{displayquote}
+
+
 
 \todo{figure out}
-This chapter provides an overview of an \gls{eye-system}. I define an eye information process as any process that uses a human eye as its input and has the aim of extracting some property of interest from it. The term thus covers both systems that analyse eye movement, i.e. eye-tracking, and eye appearance, e.g. iris recognition, retinal imagery, etc. 
+%This chapter provides an overview of an \gls{eye-system}. I define an eye information process as any process that uses a human eye as its input and has the aim of extracting some property of interest from it. The term thus covers both systems that analyse eye movement, i.e. eye-tracking, and eye appearance, e.g. iris recognition, retinal imagery, etc. 
 
 
-The model is based on a general idea of \gls{eye-system}s. This is the kind of system introduced in \cref{sec:eye-tracking} but should be understood in a more general manner
+%The model is based on a general idea of \gls{eye-system}s. This is the kind of system introduced in \cref{sec:eye-tracking} but should be understood in a more general manner
 
-The first section provides an overview of the anatomy of human eyes. It serves as a reference for easily understanding how eye information processes uses the anatomy for their operation as well as what the physical limitations are. 
+%The first section provides an overview of the anatomy of human eyes. It serves as a reference for easily understanding how eye information processes uses the anatomy for their operation as well as what the physical limitations are. 
 
-Next, the foundations of modern eye-tracking systems will be presented. The goal is to provide the reader with a birds-eye view of the field and its methods.
+%Next, the foundations of modern eye-tracking systems will be presented. The goal is to provide the reader with a birds-eye view of the field and its methods.
 
-The final section focuses on sensitive information. Both appearance-based extraction techniques such as iris recognition and gaze-based techniques such as attention-analysis will be presented. 
+%The final section focuses on sensitive information. Both appearance-based extraction techniques such as iris recognition and gaze-based techniques such as attention-analysis will be presented. 
 
 
-\section{Anatomy}
-Our eyes are an essential part of the human existence. What is so special about the eyes is that they are not just sensory apparatuses for enabling us to register many properties of the physical world around us but also reveal a wealth of information about their owner's current physical and mental state. From a social perspective, eye movements communicate where their owner are looking which typically corresponds with their focus of attention. Additionally, eyes are clearly used socially as indicators of well-being as well as social interaction, i.e. by looking into the eyes of other people. It is likely no coincidence that the eyes have often mythologically been described as doorways to the soul or in some other way been seen as a logical end-point of our minds. To see is often analogous to understand or realise. 
+\section{Anatomy and physiology of human eyes}
+Human eyes are complex organs whose function is integral to our perception of and interaction with the world. Their movements are caused by both conscious and unconscious processes which enables their use in discovery of human behaviour and psychology on both and individual and collective level (REF). The physical complexity also reveals what is likely the most accurate biometric for authentication in existence (REF daugman) and other features that may be used for identification. 
+
+This overview focuses on the anatomical and physiological elements of human eyes that are most relevant to information extraction and obfuscation. \Cref{fig:anatomy} shows an overview of a human eye. It is shaped approximately like a sphere with a bulge where the \emph{cornea} is places. The most interesting areas from the perspective of eye information processes, are the retina and the frontal lens complex. 
+
+%They are controlled by both conscious and subconscious processes which 
+
+%It consists of a multitude of elements that work in cooperation to make visual perception possible and even starts the process of visual cognition before the electro-chemical nerve-impulses reaches the brain\cite{duchowskiEyeTrackingMethodology2007}. On a social level, the eyes are used as fixation points when interacting with other people. The human eye is thus recognised as one of the key traits of being human, both in our interaction with and perception of the world and each other. The anatomy of the eye is quite complex and I, therefore, limit this introduction to the elements relevant to eye-tracking and information retrieval. 
+
+%Our eyes are an essential part of the human existence. What is so special about the eyes is that they are not just sensory apparatuses for enabling us to register many properties of the physical world around us but also reveal a wealth of information about their owner's current physical and mental state. From a social perspective, eye movements communicate where their owner are looking which typically corresponds with their focus of attention. Additionally, eyes are clearly used socially as indicators of well-being as well as social interaction, i.e. by looking into the eyes of other people. It is likely no coincidence that the eyes have often mythologically been described as doorways to the soul or in some other way been seen as a logical end-point of our minds. To see is often analogous to understand or realise. 
 
 \begin{figure}
     \centering
@@ -26,13 +59,13 @@ Our eyes are an essential part of the human existence. What is so special about 
     \label{fig:anatomy}
 \end{figure}
 
-From a physiological perspective, the eye is an incredibly complex organ which reacts in variou...
+%From a physiological perspective, the eye is an incredibly complex organ which reacts in variou...
 
 
-\Cref{fig:anatomy} shows an overview of a human eye. It is shaped approximately like a sphere with a bulge where the \emph{cornea} is places. The most interesting areas from the perspective of eye information processes, are the retina and the frontal lens complex. 
+
 
 \todo{remember references}
-The \emph{retina} is a tissue covering the inside of the eye. It is composed of light sensitive neurons called photoreceptors, which react to either a wide (rods) or narrow (cones) band of light bandwidths. The rods are used for black/white vision, typically in low-light conditions due to their much higher sensitivity than cones. Cones are primarily used for colour vision as there are three types which each respond to a specific band of wavelengths. Cones have a much higher concentration around a small area on the retina called the \emph{fovea}. This area enables high visual acuity and is therefore generally considered the primary place of attention. In fact, it is well-known that, in spite of the rapid drop-off in photoreceptor density outside the fovea, the human brain succeeds in combining visual information from many individual fixations to produce what seems like high-resolution visual perception.
+The \emph{retina} is a tissue covering the inside of the eye (REF). It is composed of light sensitive neurons called photoreceptors, which react to either a wide (rods) or narrow (cones) band of light bandwidths (REF). The rods are used for black/white vision, typically in low-light conditions due to their much higher sensitivity than cones (REF). Cones are primarily used for colour vision as there are three types which each respond to a specific band of wavelengths (REF). Cones have a much higher concentration around a small area on the retina called the \emph{fovea} (REF). This area enables high visual acuity and is therefore generally considered the primary place of attention (REF). In fact, it is well-known that, in spite of the rapid drop-off in photoreceptor density outside the fovea, the human brain succeeds in combining visual information from many individual fixations to produce what seems like high-resolution visual perception (REF).
 
 \begin{figure}
     \centering
@@ -41,53 +74,52 @@ The \emph{retina} is a tissue covering the inside of the eye. It is composed of 
     \label{fig:my_label}
 \end{figure}
 
-The fovea is very important for determining gaze direction or point-of-regard since it determines what is known as the \emph{visual} axis which intersects the lens centre and fovea. This visual axis typically varies slightly (about 5 degrees) from the \emph{optical axis} which intersects the cornea, pupil, and lens. This variation is different from person to person which has to be corrected by an eye-tracker. Typical modern eye-trackers have gaze direction errors of about $0.5^\circ-1.5^\circ$ which is much lower than the $\pm 5^\circ$ of the visual axis.
+The fovea is very important for determining gaze direction or point-of-regard since it determines what is known as the \emph{visual} axis which intersects the lens centre and fovea. This visual axis typically varies slightly (about 5 degrees) from the \emph{optical axis} which intersects the cornea, pupil, and lens. This angle is called angle kappa. This variation is different from person to person which has to be corrected by an eye-tracker.
 
 The frontal lens complex contains the components that allow light to enter the eye in a controlled manner. The lens system is composed of the static \emph{cornea} which accounts for a majority of the eye's optical power and the \emph{lens} which is adjusted by muscles called \emph{ciliary bodies} located behind the iris. The \emph{iris} is composed of muscles that control the size of the circular opening in its middle known as the \emph{pupil}. This allows the eye to adjust the amount of light entering the eye. 
 
 \subsection{Eye movements}
-Eye movements are formed of both conscious, semiconscious, and unconscious actions. This has led to great interest in studying these movements for various purposes, including behavioural studies as well as ...
-
-There are five basic categories of eye movements: saccades, vergence movements, smooth pursuits, vestibular, and physiological nystagmus \parencite[39]{methodology}. Saccades are further subdivided into macro- and micro-saccades. Macro-saccades are the typical jerky movements we perform when moving from fixation to fixation. Micro-saccades are involuntary movements of $0.03-2$ degrees. The purpose of micro-saccades is to change the light-stimulus on the retina, since continuous stimulus of photoreceptors results in decreasing activation strength over time \parencite[44]{methodology}. Smooth pursuits are a mode of movement where the eye follows a fixation point on a moving object. Vergence movements are relative movements of the left and right eye to ensure vergence of the visual axes at the point of fixation \parencite{methodology}.
+Eye movements are formed of both conscious, semiconscious, and unconscious actions. There are five basic categories: saccades, vergence movements, smooth pursuits, vestibular, and physiological nystagmus \parencite[39]{methodology}. Saccades are further subdivided into macro- and micro-saccades. Macro-saccades are the typical jerky movements we perform when moving from fixation to fixation. Micro-saccades are involuntary movements of $0.03-2$ degrees. The purpose of micro-saccades is to change the light-stimulus on the retina, since continuous stimulus of photoreceptors results in decreasing activation strength over time \parencite[44]{methodology}. Smooth pursuits are a mode of movement where the eye follows a fixation point on a moving object. Vergence movements are relative movements of the left and right eye to ensure vergence of the visual axes at the point of fixation \parencite{methodology}.
 
 
 \section{Eye-tracking}\label{sec:eye-tracking}
 \Gls{eye-tracking} covers the processes of detecting the location and movements of eyes and estimating \gls{gaze}. Gaze is defined as either a specific \acrfull{por} or as a \emph{direction}. Today, this is done exclusively through image based techniques (REF) but intrusive methods, typically using some form of special contact lens in combination with a sensor, also exist (REF).
 
-\subsection{Why}
+\subsection{Why eye-tracking is important}
 \begin{figure}
 	\centering
 	\includegraphics[width=1\textwidth]{figures/model/eye-tracking-model}
 	\caption{Model overview}\label{fig:eye-tracking-model}
 \end{figure}
 
-\Cref{fig:eye-tracking-model} shows a graphical overview of an eye information processing system (EIPS). It is functionally \todo{finish this}
+%\Cref{fig:eye-tracking-model} shows a graphical overview of an eye information processing system (EIPS). It is functionally \todo{finish this}
 
 
 
-To understand \gls{eye-tracking}, we first need to understand the purposes for which it was made. \todo{finish}
+%To understand \gls{eye-tracking}, we first need to understand the purposes for which it was made. \todo{finish}
 
 In terms of research, \gls{eye-tracking} has traditionally been of interest in psychology (REfs) and physiology (REFS) studies due to the close connection between gaze and attention and the prominent use of eyes in humans everyday lives. A typical application is the study of visual attention, i.e. where a person is looking in a specific situation over time. Examples include studies of driver behaviour (REF), shopping behaviour (REF), analysis of reading ability and how reading works (REF), how the eyes are used in elite sports and whether analysis may be used for athletic improvements (REFS), and many more. In the medical industry, eye-tracking has been used as a tool in diagnosis of both psychological and physical conditions (REF). 
 
 Most importantly for this thesis however, are applications in \acrfull{hci} which is a term that covers technologies or systems that act as interfaces between humans and computers (REF). The rapid decrease in part costs has made consumer-level and large-scale medical \acrlong{hci} feasible. Major corporations investing in \acrfull{vr} technologies including NVidia and Facebook, have started major research efforts towards enabling low-cost and precise eye-tracking built into \acrshort{vr}-headsets (REF). In the medical industry, technologies such as tablets have already been deployed on large scales to enrich the communication abilities of people suffering from various diseases (REF). Eye-tracking technologies that are easier to use and simpler to set up are actively being researched as well (REF). 
 
-\subsection{How it works}
+\subsection{How eye-tracking works}
 \begin{figure}
 	\includegraphics[width=1\textwidth]{figures/model/taxonomy}
 	\caption{Eye tracking taxonomy.}\label{fig:taxonomy}
 \end{figure}
-All eye-tracking systems are composed of some common elements. \cref{fig:taxonomy} shows a possible component schematic of such a generalised system. At the most abstract level - an eye tracker works by capturing images of one or both of the subject's eyes and uses a number of different techniques to track the eyes themselves and to predict gaze. Because the use cases vary widely, a number of important classifications exist based on the hardware setup as well as the analysis methods employed.
+An eye-tracking system can be decomposed into a number of components, some of which are common to all approaches and some of which are only used for specific applications. \Cref{fig:eye-tracking-model} shows a possible component diagram of such a generalised system. At the most abstract level - an eye tracker works by capturing images of one or both of the subject's eyes and uses image manipulation techniques to track the eyes themselves and to predict gaze. Because the use-cases vary widely, a number of important classifications exist based on the hardware setup as well as the analysis methods employed.
 
-The capturing setup is primarily determined by the relative mounting position of the eye-facing camera relative to the subject. In \gls{head-mounted} \gls{eye-tracking},  the eye-facing camera is fixed relative to the head of the subject and hence translational movements of the eye are kept to a minimum. The alternative is remote\todo{glossary} \gls{eye-tracking} where the camera is not fixed to the head and therefore allows more degrees of movement. Head-mounted eye-trackers may typically be augmented by a \gls{scene-camera} which points directly away from their head and can thus be used to determine what they are looking at a given point in time. \Gls{head-mounted} \gls{eye-tracker}s are often used when high-precision detection or gaze estimation is needed but comes at the cost of being less convenient to set up than a remote camera. Remote setups may provide high-precision eye-tracking if the head is fixed using a chin-rest or similar. The precision gained by fixing the relative position of eye and camera most stems mainly from the much higher utilisation of the image resolution as the eye can fill the entire image. Eye-tracking precision is generally affected by the environment, which is why controlled environments are generally preferred if possible. In many cases however, such as attention analysis, the environment cannot be controlled .... \todo{Example images and hardware setups!}
+\subsection{Capture setup}
+The capturing setup is primarily determined by the relative mounting position of the eye-facing camera relative to the subject. In \gls{head-mounted} \gls{eye-tracking},  the eye-facing camera is fixed relative to the head of the subject and hence translational movements of the eye are kept to a minimum. The alternative is remote\todo{glossary} \gls{eye-tracking} where the camera is not fixed to the head and therefore allows more degrees of movement. Head-mounted eye-trackers may typically be augmented by a \gls{scene-camera} which points directly away from their head and can thus be used to determine what they are looking at a given point in time. \Gls{head-mounted} \gls{eye-tracker}s are often used when high-precision detection or gaze estimation is needed but comes at the cost of being less convenient to set up than a remote camera. Remote setups can provide high-precision eye-tracking if the head is fixed using a chin-rest or similar. The precision gained by fixing the relative position of eye and camera most stems mainly from the much higher utilisation of the image resolution as the eye can fill the entire image. Eye-tracking precision is generally affected by the environment, which is why controlled environments are generally preferred if possible. In many cases however, the environment cannot be controlled.
 
-Eye-tracking systems cover a large range of use cases that require the detection of different properties. \Gls{gaze} is the most widely used end-product which may itself be used in secondary analyses of other personal properties (SECTION EYEINFO). Other important products include the iris and sclera textures which may be used for personal identification (REF) and the size of the pupil as it changes in response to external stimuli (REF). \Gls{gaze} is also typically used for eye movement analysis which produces an event-based overview of what kind of movements occur at given points in time (REFS). The different end-products have different requirements, but they all share the fundamental concept of being properties of interest that should be extracted from the source eye images. This generalisation idea is built upon in later sections (SECREF) to provide a theoretical model for eye-tracking that is useful for analysing privacy.... \todo{decide whether things should be added}
+\subsection{System methods}
+Methods for performing image analysis and property estimation are typically divided into several subtypes as shown in \cref{fig:taxonomy}. 
 
-The property detection methods, of which there may be many or few in a given eye-tracking system, are typically classified as either appearance-based or feature-based. However, because of how modern systems including convolutional neural network (CNN) based ones makes the line seem less clear-cut, I redefine the two classes as holistic and local approaches after the same terms used in (dan REF). Figure (REF) shows the classification scheme. Holistic approaches consider the eye in its entirety, either by methods such as template matching (REF), or machine learning models such as CNNs mapping images directly to gaze. Local approaches instead consider specific eye elements or image features which are then combined. 
+Eye-detection is the process of determining physical eye properties in an image such as its position and rotation. Shape-based approaches are either fixed or deformable. The former uses image manipulation techniques such as thresholding and edge detection to directly infer features from images, while the latter fits geometrically defined models iteratively to an image (REF). Appearance-based eye detection uses the appearance of the image as a whole to determine the eye's location. Intensity-based methods use the source image directly for matching with a template or measuring filter responses, while subspace methods instead focus on finding transformations that projects images onto a low-dimensional subspace that indicate eye properties (REF). Neural network based approaches may be viewed as both intensity and subspace methods since they perform both filtering and transformations (REF). Methods that combine any of the above are known as hybrid methods (REF). 
 
-Eye-trackers may mix these methods. For example, CNNs which are inherently appearance-based have been shown to be extremely accurate at predicting the pupil centre which is then used in a two-dimensional gaze estimation model whic
+Gaze estimation is the process of estimating gaze. Feature-based gaze methods use products of eye-detection processes directly by constructing a geometric model that is fitted to training data with known gaze locations. An approach which is widely used (in this thesis as well) due to its simplicity, is the pupil and corneal reflection approach. It works by using feature-detection techniques to find the pupil centre and one or more reflections (glints) of LEDs placed on the eye-tracker. The glints correct for eye translations by acting as the definition for a coordinate system. Gaze is then determined by a polynomial model mapping the pupil-glint vectors to gaze (REF). Other methods use three-dimensional models for determining the gaze direction geometrically (REF). In both cases, more complex models have been developed that correct for inaccuracies in measurements caused by distortions (REF). Appearance-based gaze methods instead use the image directly for gaze estimation. Methods based on neural networks (REF) and deformable models (REF) exist. In general, though not always, feature-based methods are used primarily in head-mounted eye-trackers where precision is more important and appearance-based methods are used in remote eye-trackers where the distances involved makes it difficult to robustly detect individual features (REF).
 
-\todo{Continue!}
-
+Calibration is generally necessary for accurate gaze estimation due to the angle kappa as described in SECREF. In feature-based gaze estimation this can typically be achieved by fitting the gaze model to a set of calibration points for the subject using the eye-tracker.
 %appearance-based and feature-based methods. The former covers methods that use the source image appearance to predict an output property
 
 %Appearance-based methods use the image appearance itself to determine some property, e.g. eye position. This can be done either by template matching (REF), filter responses, or, more widespread today, using neural networks (REFS). 
@@ -109,69 +141,77 @@ Eye-trackers may mix these methods. For example, CNNs which are inherently appea
 %Eye-tracking is a scientific field that cover many different disciplines from computer science and engineering to psychology and biology. These can be divided into the research in eye-tracking technology and research enabled by eye-tracking technology. This section focuses on the former. It gives a short introduction to the eye-tracking technologies available today, how they work, and where they are used.
 
 
-\section{Privacy}\todo{Needs a lot of glue and rewriting of old material}
-This section presents potentially sensitive information sources in eye-tracking systems. The first part focuses on sensitive information that is extracted directly from eye images and the second part focuses on information derived from gaze signals.
+\section{Eye information use}
+This section presents applications for processes involving eye-tracking systems. This includes both systems that use eye-tracking as its end-goal and systems that use eye-tracking for other purposes, e.g. iris recognition.
 
 
-Privacy is informally understood as the ability to hide information relating to your person from others. In technical terms, privacy is typically understood as the protection of information by modifying it in a way that allows only access by those who are authorised to do so. The paradox here is that the information 
+\subsection{Use of gaze}
+The use of gaze can be divided into two major groups, analysis and human-computer-interaction (HCI). 
 
- linked with probability 
+Analysis applications typically analyse gaze in a specific setting or environment. Gaze is extremely valuable for attention studies and is used widely in behavioural research (REFS). Similarly, studies of human behaviour in a variety of situations is often augmented with gaze analysis. Studies of athletes are here especially notable since they aim both to use data for optimising human performance and discovering what behaviours impact performance the most and how it might differ between populations (REF).
 
- understood as the probability of ...
- 
- 
+HCI applications use gaze as an interface to a digital system. Since gaze can be measured accurately (a mean error of $0.4$ degrees is typical in commercial eye-trackers REF) it can be used for precision tasks such as selecting actions on a UI(REF). In medical cases, this is ideal for people who are paralysed or suffer from illnesses impairing motion or communication abilities, since most still have full control over their eye movements (REF). In consumer products, remote eye-trackers for controlling the camera in games have seen widespread use. VR and mixed-reality headsets is another ideal use-case where eye-tracking may be used for interactive purposes as well as foveated rendering (limiting high-quality rendering to a limited area around the PoR). This is being actively researched by NVidia and Facebook (REF).
 
-%\begin{displayquote}
-%No one shall be subjected to arbitrary interference with his privacy, family, home or correspondence, nor to attacks upon his honour and reputation. Everyone has the right to the protection of the law against such interference or attacks.	
-%\end{displayquote}
-
-
-\begin{definition}[Sensitive information] 
-	is any information related to a person that can be differentiated from others. This definition is a paraphrasing of the GDPR-equivalent.
-\end{definition}
-
-\begin{definition}[Privacy]
-	in the context of information systems is a measure of how difficult it is to extract some property which should be hidden. 
-\end{definition}
-
-
-Sensitive information is thus the properties that cannot be shared freely without ethical and legal implications. Privacy is a measure of how secure a given method is at preventing that the information is shared. Encryption methods typically provide probabilistic guarantees that are so extreme that they are considered unbreakable (REF). These are however not useful in all situations.
-
-Eye tracking data is created for the purpose of being consumed by some other process, whether it is in \acrshort{hci} or psychology. Encrypting the data, however, does not necessarily ensure protection for the user. In cases where the data is meant to be shared publicly, this is obvious by its definition. In other products, encryption only protects potential outside attackers from gaining access to the information. The producer of a given product still has the ability to use the information for various purposes and even if they don't intend to, the very presence of the information has legal implications in many areas of the world.
-
-
-As mentioned briefly in (SECREF 2.1), eyes reveal many things about us. 
-
-In this section, I outline known methods to exploit eye-tracking data for personal identification. Although iris-recognition is the most prominent method known today, other intriguing methods for identifying people based just on data on their eyes appearance or movements exist. Additionally, methods for determining a location or retrieving other personal information from e.g. scene cameras will also be presented.
-
-\subsection{Personal identification}
-Personal identification is one of the most serious privacy issues in eye-tracking since it makes it possible to link identity with other sensitive pieces of information. Using iris recognition specifically, it is possible to identity people with extremely high precision (REF). 
+\subsection{Sensitive information in eye-tracking systems}
+This section presents current known methods of extracting information from eye images and gaze signals. Depending on the use case this information may be seen as sensitive.
 
 \subsubsection{Iris recognition}
-The iris pattern in human eyes is unique and highly variable, even among twins and the left/right eye of a specific human being. It is also impossible to modify without risking damage to the eye \parencite{DAUGMAN_IRIS_ORIG}. Combined with the fact that fake eyes or lenses can be easily detected by utilising the contracting reflex of the pupil \parencite{DAUGMAN_IRIS_ORIG}, it makes the iris pattern an extremely valuable biometric. Genetics determine only the large-scale factors of the iris such as color, while the rest of its structure depends largely on initial conditions in the developing embryo \cite{kronfeldCHAPTERGrossAnatomy1962}, thus making it highly unique. 
+The human iris pattern is highly unique across large populations. Genetics determine only large-scale factors of the iris such as color, while the rest of its structure depends largely on initial conditions in the developing embryo \cite{kronfeldCHAPTERGrossAnatomy1962}, thus making it highly unique, even between the left and right eye of the same person and among genetically identical twins. It is also impossible to modify directly without risking damage to the eye itself \parencite{DAUGMAN_IRIS_ORIG}. Combined with the fact that fake eyes or lenses can be easily detected by utilising the contracting reflex of the pupil \parencite{DAUGMAN_IRIS_ORIG}, it makes the iris pattern an extremely accurate biometric. 
 
-A plethora of iris recognition methods exist. The most widely used and well-documented method is developed by John Daugman and uses Gabor wavelets \cite{daugmanHighConfidenceVisual1993} to produce a 2048-bit code for a given iris image. Identification is commenced by performing a test of statistical independence on the hamming distance between the two codes. If it fails the test, the codes are said to be a match. \autoref{fig:hamming-dist} shows the distributions of the hamming distance for similar and different irises. By adjusting the threshold for acceptance, Daugman achieves false-positive rates of as low as $10^{-13}$. This method will be used in a simplified form for the prototype presented in \autoref{sec:iris-recognition}.
+Iris recognition is a well studied area of research with a multitude of methods. Most common is a family of methods here defined as phase-demodulation methods due to their use of the phase response of bandpass-filters to define an iris code which is used as a signature to compare different irises. The original and today most widely deployed method is developed by John Daugman and uses Gabor wavelets to produce a 2048-bit code for a given iris image\cite{daugmanHighConfidenceVisual1993}. Identification is performed by calculating the bitwise hamming distance between iris codes and using a threshold to either accept or reject the comparison. This technique is based on the concept of statistical hypothesis testing as it only uses the distribution of unrelated iris-codes to determine a suitable threshold (REF). \autoref{fig:hamming-dist} shows an example from (REF) of the distance distributions of iris-codes originating from the same and different sources respectively. Daugman's method achieves an equal error rate (EER) of $xx\%$ in \parencite{daugman2007new} which is the highest accuracy of any of the studies.
 
-
-
-In general, iris recognition methods can be categorised by their feature extraction methods. The process always starts with iris detection, segmentation, and conversion to \emph{pseudo-polar} coordinates resulting in images such as \autoref{fig:iris-code}. This raw image input is then used for extracting features that exhibit useful properties for iris identification such as lighting invariance and robustness to angle and focus.
-
-
-The most common feature extraction methods are by far wavelet filter transforms \parencite{daugman2007new, ma2002iris, ma2004efficient, poursaberi2006iris, rydgren2004iris, zhu2000biometric} followed by frequency analysis techniques such as the discrete cosine transform\cite{iris-dct, monroDCTBasedIrisRecognition2007} and, more recently, deep learning based feature extractors\cite{gangwarDeepIrisNetDeepIris2016, nguyenIrisRecognitionOfftheShelf2018}.
+Iris recognition methods generally all use a pseudo-polar coordinate system for extracting the iris pattern from a source image. An example is shown in \autoref{fig:iris-code}. Different approaches to recognition then use various techniques for robustly extracting texture information. Wavelet filter transforms as the one used by Daugman are by far the most common with examples including \parencite{daugman2007new, ma2002iris, ma2004efficient, poursaberi2006iris, rydgren2004iris, zhu2000biometric}. This is followed followed by non-local frequency analysis techniques such as the discrete cosine transform \cite{iris-dct, monroDCTBasedIrisRecognition2007} and, more recently, deep learning based feature extractors\cite{gangwarDeepIrisNetDeepIris2016, nguyenIrisRecognitionOfftheShelf2018} (MORE?).
 
 \subsubsection{Sclera recognition}
-Another measurable physical eye feature is the blood vessels in the sclera. As stated by several studies \cite{dasScleraRecognitionSurvey2013, zhouNewHumanIdentification2012}, the blood-vessels are stable over time, although the amount of literature supporting this is relatively sparse compared to iris patterns.
+The blood vessels in the generally white sclera have also been shown to be usable as a biometric for authentication. As stated by several studies \cite{dasScleraRecognitionSurvey2013, zhouNewHumanIdentification2012}, the blood-vessels are stable over time, although the amount of literature supporting this is relatively sparse compared to iris patterns.
 
 Methods for recognition include simple edge-filter responses with support-vector machines for classification \cite{dasNewEfficientAdaptive2014} as well as more complex processes involving the detection of individual blood vessel line segments \cite{zhouNewHumanIdentification2012}. Both methods achieve false positive rates around $10^{-2}$ for genuine acceptance rates around $80\%$.
 
-\subsubsection{Identification based on eye movements}
-Both iris and sclera recognition require relatively sharp and large eye images to be feasible. Eye movements, however, is exactly the goal of most eye-tracking systems. Of special concern is remote systems such as \cite{zhangMPIIGazeRealWorldDataset2017} that are specifically designed to track gaze based on remote camera sources such as webcams. Despite this ease of access, identification based eye movement currently suffers from some of the same problems as facial recognition, namely a much higher uncertainty and susceptibility to the recording circumstances.
 
-Eye movement consists of multiple modes of operation. During a \emph{fixation}, the eye is relatively, but not completely, still as it focuses on a specific point. \emph{Saccades} are quick movements of the eyes and are split into macro-saccades and micro-saccades. The former describes the regular fast movement between fixations while the latter describes involuntary adjustments occurring even during fixation. \emph{Vergence shifts} describe movements to adjust binocular vision to perspective effects. Finally, \emph{smooth-persuit} movements describe the eye's ability to smoothly follow a moving object \cite{duchowskiBreadthfirstSurveyEyetracking2002}.
+\subsubsection{Gaze-based information extraction}
+Gaze can be used to infer a large variety of properties that are considered personal and therefore sensitive. In several works, mental disorders such as Alzheimer's, Parkinson's, schizophrenia, and ADHD are shown to be closely correlated with eye-movements and may even be inferable from gaze alone (REF). Information such as cognitive state (REFS), gender and age, and personality traits have all been inferred successfully using gaze experiments. It should be noted that these studies all use experiments created for the purpose of measuring these properties. This means they are harder to apply in practice. However, in applications such as VR, the product manufacturer may have the ability to direct the users towards activities that may be used in this manner. These methods further stress the point that eye-tracking should be of major concern from an ethical standpoint, since it might be used against the knowledge of the user. 
 
-Identification is typically performed by comparing recorded eye movement features and testing for a statistically significant difference for rejection. Ioannis Rigas, George Economou, and Spiros Fotopoulos \cite{rigasBiometricIdentificationBased2012} present a method designed around clustering eye fixations and treating them as graphs to determine similarity. The fixations are gathered by presenting subjects with several images multiple times with the same images shown to all subjects. Other methods include feature extraction from reading scan-paths \cite{hollandBiometricIdentificationEye2011, bednarikEyeMovementsBiometric2005} and the use of Gabor filter responses to create features from scan-paths to be classified by a support vector machine\cite{liBiometricRecognitionTexture2018}. The methods all achieve much higher false acceptance rates than iris and sclera recognition methods however and it remains to be seen how effective they are in practice.
+Identification using gaze is also possible and several studies exist. It is typically performed by comparing recorded eye movement features and testing for a statistically significant difference for rejection. Ioannis Rigas, George Economou, and Spiros Fotopoulos \cite{rigasBiometricIdentificationBased2012} present a method designed around clustering eye fixations and treating them as graphs to determine similarity. The fixations are gathered by presenting subjects with several images multiple times with the same images shown to all subjects. Other methods include feature extraction from reading scan-paths \cite{hollandBiometricIdentificationEye2011, bednarikEyeMovementsBiometric2005} and the use of Gabor filter responses to create features from scan-paths to be classified by a support vector machine\cite{liBiometricRecognitionTexture2018}. The methods all achieve much higher false acceptance rates than iris and sclera recognition methods however and it remains to be seen how effective they are in practice.
 
-\subsection{Attribute estimation}
+
+
+
+%Both iris and sclera recognition require relatively sharp and large eye images to be feasible. Eye movements, however, is exactly the goal of most eye-tracking systems. Of special concern is remote systems such as \cite{zhangMPIIGazeRealWorldDataset2017} that are specifically designed to track gaze based on remote camera sources such as webcams. Despite this ease of access, identification based eye movement currently suffers from some of the same problems as facial recognition, namely a much higher uncertainty and susceptibility to the recording circumstances.
+
+%Eye movement consists of multiple modes of operation. During a \emph{fixation}, the eye is relatively, but not completely, still as it focuses on a specific point. \emph{Saccades} are quick movements of the eyes and are split into macro-saccades and micro-saccades. The former describes the regular fast movement between fixations while the latter describes involuntary adjustments occurring even during fixation. \emph{Vergence shifts} describe movements to adjust binocular vision to perspective effects. Finally, \emph{smooth-persuit} movements describe the eye's ability to smoothly follow a moving object \cite{duchowskiBreadthfirstSurveyEyetracking2002}.
+
+
+
+%This section presents actual usages of eye-tracking systems 
+%This section presents potentially sensitive information sources in eye-tracking systems. The first part focuses on sensitive information that is extracted directly from eye images and the second part focuses on information derived from gaze signals.
+
+%Eye tracking data is created for the purpose of being consumed by some other process, whether it is in \acrshort{hci} or psychology. Encrypting the data, however, does not necessarily ensure protection for the user. In cases where the data is meant to be shared publicly, this is obvious by its definition. In other products, encryption only protects potential outside attackers from gaining access to the information. The producer of a given product still has the ability to use the information for various purposes and even if they don't intend to, the very presence of the information has legal implications in many areas of the world.
+
+
+%Eye-tracking systems cover a large range of use cases that require the detection of different properties. \Gls{gaze} is the most widely used end-product which may itself be used in secondary analyses of other personal properties (SECTION EYEINFO). Other important products include the iris and sclera textures which may be used for personal identification (REF) and the size of the pupil as it changes in response to external stimuli (REF). \Gls{gaze} is also typically used for eye movement analysis which produces an event-based overview of what kind of movements occur at given points in time (REFS). The different end-products have different requirements, but they all share the fundamental concept of being properties of interest that should be extracted from the source eye images. This generalisation idea is built upon in later sections (SECREF) to provide a theoretical model for eye-tracking that is useful for analysing privacy.... \todo{decide whether things should be added}
+
+%The property detection methods, of which there may be many or few in a given eye-tracking system, are typically classified as either appearance-based or feature-based. However, because of how modern systems including convolutional neural network (CNN) based ones makes the line seem less clear-cut, I redefine the two classes as holistic and local approaches after the same terms used in (dan REF). Figure (REF) shows the classification scheme. Holistic approaches consider the eye in its entirety, either by methods such as template matching (REF), or machine learning models such as CNNs mapping images directly to gaze. Local approaches instead consider specific eye elements or image features which are then combined. 
+
+%Eye-trackers may mix these methods. For example, CNNs which are inherently appearance-based have been shown to be extremely accurate at predicting the pupil centre which is then used in a two-dimensional gaze estimation model whic
+
+%\todo{Continue!}
+
+
+
+
+
+%As mentioned briefly in (SECREF 2.1), eyes reveal many things about us. 
+
+%\subsection{Use for identification}
+%In this section, I outline known methods to exploit eye-tracking data for personal identification. Although iris-recognition is the most prominent method known today, other intriguing methods for identifying people based just on data on their eyes appearance or movements exist. Additionally, methods for determining a location or retrieving other personal information from e.g. scene cameras will also be presented.
+
+%\subsection{Personal identification}
+%Personal identification is one of the most serious privacy issues in eye-tracking since it makes it possible to link identity with other sensitive pieces of information. Using iris recognition specifically, it is possible to identity people with extremely high precision (REF). 
+
+
+
+
+%\subsection{Attribute estimation}
 
 
 
