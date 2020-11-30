@@ -14,7 +14,7 @@ This chapter is an extension to the article with additional result analysis and 
 
 The noise methods, except snow and salt-and-pepper, all follow an almost straight line, "converting" mutual information into conditional entropy. \Cref{fig:individual-entropy} is similar, but with the output image entropy as its x-axis. From this figure it is clear that for all noise methods, the increase in conditional information is roughly proportional to the increase in entropy, but not at a one-to-one scale. As shown in \cref{eq:entropy-law}, this necessitates a loss in mutual information, i.e. $\mathcal{I}(I^*;I) = H(I^*) - H(I^*|I)$. Since the entropy and conditional entropy are roughly linearly correlated for the noise-based methods, we have $H(I^*) \approx \alpha H(I^*|I) + H(I)$ and as a consequence, the mutual information can be expressed as a function of the conditional entropy and the entropy of the original image 
 \begin{align*}
-\mathcal{I}(I^*;I) = (\alpha-1)H(I^*|I) + H(I).
+\mathcal{I}(I^*;I) \approx (\alpha-1)H(I^*|I) + H(I).
 \end{align*}
 This is of course only an approximation.
 
@@ -79,7 +79,8 @@ Differential privacy measures for images have been proposed by \parencite{fan201
 
 The method proposed in \parencite{BRENDAN_SNOW} does, however, use a weaker form of differential privacy allowing an extra constant term $\delta$ which signifies a probability of leaking information. They prove that $\delta$ has a maximum of $0.5$ for the snow method which means that each pixel has $50\%$ chance of a leak. However, as presented in \cref{sec:methods}, the method can easily be defeated if multiple samples are available. Additionally, even with a single sample, the method shows only moderate effectiveness at preventing recognition with high precision at low recall values. 
 
-In conclusion, differential privacy is not suitable for determining the security of obfuscation methods due to their high sensitivity and the large areas of pixels that need to be secured. As a final note, differential privacy has been shown to be highly effective in other eye-tracking privacy tasks where aggregation is involved (REFS).
+In conclusion, differential privacy is not suitable for determining the security of obfuscation methods due to their high sensitivity and the large areas of pixels that need to be secured. As a final note, this criticism does not concern the aggregation based attempts at differential privacy in eye-tracking mentioned in the article. %Instead it is 
+ differential privacy has been shown to be highly effective in other eye-tracking privacy tasks where aggregation is involved (REFS).
 
 \todo{Try to add the rest here}
 % Instead, definitions should be derived from a

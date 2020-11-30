@@ -87,7 +87,7 @@ For a set of pupil-glint vectors $\{\mathbf{x}^1, \mathbf{x}^2, \dots, \mathbf{x
 \end{equation}
 where $a$-$e$ are the parameters. A solution could be found using $12$ calibration points, but the method of least squares allows us to minimise the impact of outliers.
 
-Several pupil detectors were tested, of which DeepEye (REF) outperformed the others. Specifically, I tested a home-made BLOB based detector and the ElSE and ExCuSE detectors as well (REFS).
+Several pupil detectors were tested, of which DeepEye \parencite{vera2019deepeye} outperformed the others. Specifically, I tested a home-made BLOB based detector and the ElSE \parencite{fuhl2016else} and ExCuSE \parencite{excuse} detectors as well.
 
 \subsection{Iris recognition}
 
@@ -102,7 +102,7 @@ The iris implementation used in the experiments has been implemented from scratc
 % A very thorough implementation of multiple iris recognition algorithms are available in a library (REF) but only in c++. Writing a Python interface was outside the scope of this thesis.
 
 
-Daugman's method is based on the use of wavelets to detect the phase of the iris at a number of frequencies and angles. The minimum wavelength chosen for the filters was 3 pixels in order to avoid artefacts affecting the outcome. This minimum is limited by the Nyquist frequency (REF) ...
+Daugman's method is based on the use of wavelets to detect the phase of the iris at a number of frequencies and angles. The minimum wavelength chosen for the filters was 3 pixels in order to avoid artefacts affecting the outcome. This minimum is limited by the Nyquist frequency\todo{check this}
 
 \begin{figure}
     \begin{subfigure}{0.5\linewidth}
@@ -136,7 +136,7 @@ where $U(S)$ is a uniform distribution over $S$. This method works for any size.
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{figures/iris-code-gen.pdf}
-    \caption{Iris code generation process. (1) The annotation (see text) is used to generate a binary mask of the visible parts of the iris. (2) The pupil and iris boundaries are used to create dimensionless polar projections of the iris and mask. (3) Gabor filters are applied to the polar image, quantized, and concatenated to a $16000$-element bit-vector which is the iris code. It is here visualised using black pixels for the value $0$ and white pixels for the value $1$. Pixels masked by the polar mask projection (and excluded from comparisons) are shown in grey (zooming might be necessary). }
+    \caption{Iris code generation process. (1) The annotation (see text) is used to generate a binary mask of the visible parts of the iris. (2) The pupil and iris boundaries are used to create dimensionless polar projections of the iris and mask. (3) Gabor filters are applied to the polar image, quantized, and concatenated to a $16296$-element bit-vector which is the iris code. It is here visualised using black pixels for the value $0$ and white pixels for the value $1$. Pixels masked by the polar mask projection (and excluded from comparisons) are shown in grey (zooming might be necessary). }
     \label{fig:iris-code-gen}
 \end{figure}
 
@@ -147,7 +147,7 @@ Iris obfuscation has at least two objectives, one for the gaze accuracy and one 
 \end{align}
 as originally suggested by my supervisor in \cite{proposal}. This approach may be suitable when sufficient knowledge about the problem makes it possible to define reasonable values for the weights. It does, however, assume prior knowledge of the relative importance of the objectives. 
 
-Instead, this thesis focuses on exploring the trade-offs between various objectives over a large range of possible parameter values for each obfuscation method. In the article this is done using grid-search due to the relatively limited search space. I also experimented with a population-based method for combining multiple objectives which preserves (something).
+Instead, this thesis focuses on exploring the trade-offs between various objectives over a large range of possible parameter values for each obfuscation method. In the article this is done using grid-search due to the relatively limited search space. I also experimented with a population-based method for combining multiple objectives which preserves (something).\todo{what is something?}
 
 \subsection{Pareto optimality}
 A central idea in using these explorative methods is \textit{pareto optimality}. Pareto optimality is based on the concept that even when objectives are not comparable, it is possible to determine an ordering of the optimality of points. Figure (REF)\todo{figure} shows an example in two dimensions. The points marked in blue are objectively better than any of the black points. Being objectively better here means that it is at least as good in every dimension and better in at least one. This is called dominance - the full definition is shown in \cref{def:dominance}. Points that are not dominated by any other point is \textit{Pareto optimal} (\Cref{def:p-optimal}). The subset of all such points of a given set is called the \textit{Pareto frontier} (\Cref{def:p-frontier}). In this example, the blue points define the Pareto Frontier.
@@ -205,7 +205,12 @@ for unconstrained optimisation. This is problematic since there is no relation v
 \section{Filtering approaches}
 We approach the analysis of separating the iris signal and the gaze signal from a pragmatic perspective. An image may be visualised as a height-map to more clearly display the individual pixel values. 
 
-(FIG) shows an eye image and a one-dimensional slice where the light intensity is graphed as a function of the x-position. Clearly, the portion covering the iris shows relatively chaotic changes but low variance compared to the rest of the image. The pupil-iris boundary and glint-pupil boundary which are used in our gaze-estimation method are clearly identifiable since they are represented as huge changes in intensity. These sorts of examples are typically also shown when introducing image edge detection, since it clearly demonstrates the connection between rate of change, i.e. the gradient, and the presence of an edge. 
+\begin{figure}
+	\includegraphics[width=1\textwidth]{figures/1dimage}
+	\caption{Shows a one-dimensional slice of an eye-image to demonstrate how image intensity reveals the presence of the pupil.}\label{fig:1dimage}
+\end{figure}
+
+\Cref{fig:1dimage} shows an eye image and a one-dimensional slice where the light intensity is graphed as a function of the x-position. Clearly, the portion covering the iris shows relatively chaotic changes but low variance compared to the rest of the image. The pupil-iris boundary and glint-pupil boundary which are used in our gaze-estimation method are clearly identifiable since they are represented as huge changes in intensity. These sorts of examples are typically also shown when introducing image edge detection, since it clearly demonstrates the connection between rate of change, i.e. the gradient, and the presence of an edge. 
 
 When analysing the image as a Fourier series, two important factors stand out. Firstly, the iris seems to be dominated by a low-amplitude, very random signal. This indicates a range of small to medium wavelengths and high entropy. The edge regions, which are used by our gaze algorithm, instead look roughly like square waves. A square wave requires an infinite Fourier series to be represented accurately. Because the image is effectively band-limited, it is possible to recreate it with a finite series but it still spans the whole wavelength spectrum.
 

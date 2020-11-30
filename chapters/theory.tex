@@ -15,7 +15,7 @@ This thesis takes the perspective of viewing all eye information sources as well
     \label{fig:comm-model}
 \end{figure}
 
-\textit{Signal} is a rather vague term that is typically used to describe data that is transmitted over some medium and that contains \textit{meaningful information}. In this thesis, we use signal to denote any meaningful information that has been encoded by an arbitrary process. For example, the physical position and rotation of the eye is an encoding of several properties including point of regard. Information theory is a theoretical framework introduced by Claude Shannon for precisely measuring uncertainty in communication systems (REF). The signals of interest in case of eye-tracking and obfuscation methods are either images or time-based signals such as gaze or eye-feature parameters. These signals are only observed in discrete intervals defining units of time, space, or both. We therefore only consider the discrete parts of information theory. 
+\textit{Signal} is a rather vague term that is typically used to describe data that is transmitted over some medium and that contains \textit{meaningful information}. In this thesis, we use signal to denote any meaningful information that has been encoded by an arbitrary process. For example, the physical position and rotation of the eye is an encoding of several properties including point of regard. Information theory is a theoretical framework introduced by Claude Shannon for precisely measuring uncertainty in communication systems \parencite{shannon1948mathematical}. The signals of interest in case of eye-tracking and obfuscation methods are either images or time-based signals such as gaze or eye-feature parameters. These signals are only observed in discrete intervals defining units of time, space, or both. We therefore only consider the discrete parts of information theory. 
 
 As shown in \cref{fig:comm-model}, a communication system consists of an information source that is transmitted as a signal over a channel and then decoded back into its original representation. This basic diagram can be applied to many kinds of situations including error handling, compression, and, as proposed in this thesis, eye information obfuscation.
 
@@ -30,9 +30,13 @@ The Shannon entropy is the expectation of the self information $I(X)$ of each ou
 \end{equation}
 \end{definition}
 
-with results in the units of bits. Different bases may be used for alternate units. A uniformly distributed discrete random variable has an entropy of $\log{N}$ which is maximal for its number of states. In terms of iris recognition, the entropy of code symbols (bits are typically used) can be used to calculate the expected amount of information present in the entire signal. For example, Daugman calculated the expected iris code entropy by fitting a binomial distribution to the iris code distance comparisons, which revealed an approximate 250 bits of information between codes (REF). This entropy only accounts for the information content in the final codes and thus does not account for noise added during the encoding and processing steps. 
+with results in the units of bits. Different bases may be used for alternate units. A uniformly distributed discrete random variable has an entropy of $\log{N}$ which is maximal for its number of states. Analogous to conditional probability, the notion of conditional entropy signifies the entropy of a signal given knowledge of another. In \cref{fig:comm-model}, the conditional entropy can only originate from the noise source but in general, any number of signals may be combined in a channel and affect the conditional entropy. It can be defined in terms of the distributions of input and output signals $X$, $Y$.
 
-Analogous to conditional probability, the notion of conditional entropy signifies the entropy of a signal given knowledge of another. In \cref{fig:comm-model}, the conditional entropy can only originate from the noise source but in general, any number of signals may be combined in a channel and affect the conditional entropy. It can be defined in terms of the distributions of input and output signals $X$, $Y$.
+%In terms of iris recognition, the entropy of code symbols (bits are typically used) can be used to calculate the expected amount of information present in the entire signal. 
+
+%For example, Daugman calculated the expected iris code entropy by fitting a binomial distribution to the iris code distance comparisons, which revealed an approximate 250 bits of information between codes (REF). This entropy only accounts for the information content in the final codes and thus does not account for noise added during the encoding and processing steps. 
+
+
 
 \begin{definition}[Conditional entropy]
 For random variables $X$, $Y$, the conditional entropy $H(Y|X)$ is defined by:
@@ -169,7 +173,7 @@ The channel capacity of specific obfuscation methods define strong upper limits 
 \section{Signal processing}
 This section introduces a number of central concepts of signal processing that are used throughout the thesis in both the model proposal, experiments, and evaluation. Signal processing is widely used in computer vision and is equally applicable for one-dimensional time-series data such as gaze signals. The signals of interest in case of eye-tracking and obfuscation methods are either images or time-based signals such as gaze or eye-feature parameters. These signals are only observed in discrete intervals defining units of time, space, or both. 
 
-The field of signal processing generally concerns signals that are at least approximately continuous. The reason is that many real-world phenomena when measured resemble continuous functions. More specifically, signal processing concerns how to characterise and transform signals measured at discrete intervals using frequency analysis (REF?).  
+The field of signal processing generally concerns signals that are at least approximately continuous. The reason is that many real-world phenomena when measured resemble continuous functions. More specifically, signal processing concerns how to characterise and transform signals measured at discrete intervals using frequency analysis.  
 
 
 
@@ -210,6 +214,7 @@ For images, convolution is expressed in the spatial domain as
     \hat{I}(x, y) = \sum_{i=x-s}^{x+s}\sum_{j=y-s}^{y+s} I(x,y)k(i,j),
 \end{align}
 where $I$ is an image and $k$ is the modifying function (a.k.a. convolution kernel) and both are represented by matrices. $s=w/2 -1$ where $w$ is the width of $k$.
+\todo{introduce gabor filter banks and figures!}
 
 
 
@@ -219,10 +224,12 @@ where $I$ is an image and $k$ is the modifying function (a.k.a. convolution kern
 \begin{subfigure}{0.49\textwidth}
 	\centering
 	\includegraphics[width=1\textwidth]{figures/theory/gabor_sample}
+	\caption{Spatial domain}
 \end{subfigure}
 \begin{subfigure}{0.49\textwidth}
 	\centering
 	\includegraphics[width=1\textwidth]{figures/theory/gabor_sample_f}
+	\caption{Frequency domain (amplitude)}
 \end{subfigure}
 \caption{Sample Gabor filter bank in both spatial (left) and frequency domain (right).}\label{fig:gabor-sample}
 \end{figure}
