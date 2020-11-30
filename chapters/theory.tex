@@ -167,66 +167,74 @@ The channel capacity of specific obfuscation methods define strong upper limits 
 
 
 \section{Signal processing}
-The field of signal processing generally concerns signals that are at least approximately continuous. The reason is that many real-world phenomena when measured resemble continuous functions. More specifically, signal processing concerns how to characterise and transform signals measured at discrete intervals using frequency analysis (REF?). It is widely used in computer vision.
+This section introduces a number of central concepts of signal processing that are used throughout the thesis in both the model proposal, experiments, and evaluation. Signal processing is widely used in computer vision and is equally applicable for one-dimensional time-series data such as gaze signals. The signals of interest in case of eye-tracking and obfuscation methods are either images or time-based signals such as gaze or eye-feature parameters. These signals are only observed in discrete intervals defining units of time, space, or both. 
 
-The signals of interest in case of eye-tracking and obfuscation methods are either images or time-based signals such as gaze or eye-feature parameters. These signals are only observed in discrete intervals defining units of time, space, or both. Therefore, 
+The field of signal processing generally concerns signals that are at least approximately continuous. The reason is that many real-world phenomena when measured resemble continuous functions. More specifically, signal processing concerns how to characterise and transform signals measured at discrete intervals using frequency analysis (REF?).  
+
 
 
 In its most abstract form, a signal is simply a function. Typically though, signals are used specifically to refer to functions that are representations of a physical or abstract quantity that varies in intensity over its range. \emph{Signal processing} is a scientific field covering the study of signals. This includes analysis 
 
-Images are discrete signals that vary in space along two dimensions and possibly in depth (for creating colour images). 
-
-
-\begin{definition}[Periodic functions]
-A function $f: A \rightarrow B$ is said to be periodic if, for some $P\in A$, $\forall x\in A: f(x+P) = f(x)$.
-\end{definition}
-
-\begin{definition}[Fourier series]
-Any periodic function 
+\subsection{Fourier analysis}
+Fourier analysis uses sinusoidal functions to analyse the presence of cyclic elements in functions. It is based on the observation that functions can generally be approximated by a sum of complex exponentials (complex sinusoids). This sum is called a Fourier series and has the following definition:
 \begin{equation}
-    s_N(x) = \frac{a_0}{2} + \sum_{n=1}^\infty c_n \cdot e^{i\frac{2\pi n x}{P}},
+    s_N(x) = \sum_{n=-\infty}^{\infty} c_n \cdot e^{i\frac{2\pi n x}{P}},
 \end{equation}
+where $c_n$ are the Fourier coefficients (weights) of each exponential. A Fourier series requires the target function $f: A \rightarrow B$ to be periodic, i.e. $\forall x\in A: f(x+P) = f(x)$ for some $P\in A$.
 
-\end{definition}
+The Fourier Transform, or rather its inverse, is a generalisation of the concept of approximating functions using sums of complex sinusoids which does not require the source function to be periodic. The regular Fourier Transform allows decomposition of an arbitrary function into its frequency constituents. It is an integral transform defined as
 
-The Fourier Transform, or rather its inverse, is a generalisation of the concept of approximating functions using sums of sines and cosines which does not require the source function to be periodic. The regular Fourier Transform allows decomposition of an arbitrary function into its frequency constituents. It is an integral transform defined as
-
-\begin{align*}
+\begin{align}\label{eq:conv}
 	\hat{f}(\xi) = \int_{-\infty}^{\infty} f(x) e^{-2\pi i x\xi}dx,
-\end{align*}
-where $\xi$ is a given frequency. For example, the Fourier transform of a \todo{example function}. The complex exponential $e^{-2\pi i x\xi}$ is by definition periodic (\todo{example image}) and as such the Fourier transform can be understood as measuring the degree to which the origin function responds to a specific period.
+\end{align}
+where $\xi$ is a given frequency. For example, the Fourier transform of a \todo{example function}. The complex exponential $e^{-2\pi i x\xi}$ is by definition periodic (\todo{example image}) and as such the Fourier transform can be understood as measuring the degree to which the origin function responds to a specific period. The Fourier Transform is a powerful tool that allows decomposition of functions into their frequency components. 
 
-The Fourier Transform is an incredibly powerful tool that allows decomposition of functions into their frequency components. This can be extremely useful in \todo{add talk}
-
-
+Frequency analysis is used in this thesis as a tool for understanding how various processes affect images and how the iris pattern and features used for gaze estimation are represented in the frequency domain.
 
 \subsection{Image filters}
-Many image modifications are more easily analysable and applicable in the frequency domain. 
+This section introduces the notion of convolution since it is essential to understanding how the presented obfuscation methods interact with the eye images and how information is extracted from the images to estimate gaze and produce iris codes.
 
-\subsubsection{Convolution}
-
-\begin{definition}[Convolution]
-The convolution operation is denoted by the symbol $*$. For functions $f$ and $g$, it is defined as 
+Convolution, denoted by the symbol $*$, is an operation on two functions that use one function as a sliding template. In the continuous domain, convolution is defined as
 \begin{equation}
     (f*g)(t) = \int_{-\infty}^\infty f(\tau)g(t-\tau)d_\tau
-\end{equation}
-\end{definition}
-
+\end{equation},
+for functions $f$ and $g$. 
+What the convolution operation actually does, is best explained by looking at its Fourier transformation. In the frequency domain, a convolution is simply the multiplication of the Fourier transformation of the source functions, i.e.
 \begin{equation}
-    \widehat{(f*g)}(t) = k\hat{f}(t)\hat{g}(t)
+    \widehat{(f*g)}(t) = k\hat{f}(t)\hat{g}(t),
 \end{equation}
+where $k$ is a constant that depends on the normalisation of the Fourier transform. This is known as the \emph{convolution theorem}. Thus, a convolution is really a multiplication of the frequency components of the source functions. This has the implication that convolutions inherently modify specific frequencies, making them ideal candidates for implementing band-pass filters. 
 
-Convolution for images:
+For images, convolution is expressed in the spatial domain as
 \begin{align}
     \hat{I}(x, y) = \sum_{i=x-s}^{x+s}\sum_{j=y-s}^{y+s} I(x,y)k(i,j),
 \end{align}
+where $I$ is an image and $k$ is the modifying function (a.k.a. convolution kernel) and both are represented by matrices. $s=w/2 -1$ where $w$ is the width of $k$.
 
-\subsubsection{Localising frequency}
-The Fourier Transform is not localised and therefore does reveal any spatial understanding of how frequencies are distributed in a given function. Knowing this is, however, extremely useful in image analysis. Spatially localised frequency analysis is the basis of edge and blob detection in images and is also used in feature-detection and texture analysis applications such as iris recognition. Several approaches exist to localise frequency responses but the most important method, and the one relevant to this thesis for both iris recognition and analysis of iris obfuscation, is the wavelet transform.
 
-The wavelet transform is, just as the Fourier Transform, an invertible transform but it \todo{definition}.
 
-Wavelets act as bandpass filters. This is clear when they are viewed in the Fourier domain (FIGREF). Compared to the Gaussian filter (left) and the high-pass filter (right), the wavelet filter (Gabor function) is ....
+
+\subsection{Localising frequency}
+\begin{figure}
+\begin{subfigure}{0.49\textwidth}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/theory/gabor_sample}
+\end{subfigure}
+\begin{subfigure}{0.49\textwidth}
+	\centering
+	\includegraphics[width=1\textwidth]{figures/theory/gabor_sample_f}
+\end{subfigure}
+\caption{Sample Gabor filter bank in both spatial (left) and frequency domain (right).}\label{fig:gabor-sample}
+\end{figure}
+
+The Fourier Transform is not localised and therefore does not reveal any spatial understanding of how frequencies are distributed in a given function. Knowing this is, however, extremely useful in image analysis. Spatially localised frequency analysis is the basis of edge and blob detection in images and is also used in feature-detection and texture analysis applications such as iris recognition. Several approaches exist to localise frequency responses but the most important method, and the one relevant to this thesis for both iris recognition and analysis of iris obfuscation, is the wavelet transform.
+
+The wavelet transform is, just as the Fourier Transform, an invertible transform but instead of complex exponentials which have infinite support, it uses a wavelet function which has local support, i.e. it is only non-zero for some finite area around the origin. It uses an orthonormal series of wavelets to decompose the original signal into a number of frequency-bands.
+
+As suggested by the treatment of convolutions, wavelet transformations for a single frequency-band can be implemented using the convolution operation. Many wavelet types exist, but in this thesis only the Gabor wavelet is used.
+
+
+%This is clear when they are viewed in the Fourier domain (FIGREF). Compared to the Gaussian filter (left) and the high-pass filter (right), the wavelet filter (Gabor function) is ....
 
 A Gabor wavelet is simply the product of a complex sinusoidal function (also called complex exponentials) and a complex Gaussian function. Here, we define it in a two-dimensional variation with adjustable frequency $\omega$, angle $\theta$, and standard deviation $\sigma$ of the envelope:
 \begin{align}
@@ -235,6 +243,7 @@ A Gabor wavelet is simply the product of a complex sinusoidal function (also cal
     \hat{y} &= -x\sin\theta + y\cos\theta.
 \end{align}
 
+\todo{wavelet example}
 
 
 
@@ -261,35 +270,35 @@ A Gabor wavelet is simply the product of a complex sinusoidal function (also cal
 
 
 
-\section{Image entropy}\todo{Omskriv og tilføj detaljer}
-Entropy is based on a representation of signals as random samples, at least in the discrete case which is the one we consider here. This means that individual symbols are independent by the definition of a random sample (REF). Consequently, signals that exhibit clear correlations between symbols are not accurately presented. By definition of mutual information $H(Y|X) \leq H(Y)$ with equality achieved only if they are independent, i.e. $I(X;Y) = 0$. 
+%\section{Image entropy}\todo{Omskriv og tilføj detaljer}
+%Entropy is based on a representation of signals as random samples, at least in the discrete case which is the one we consider here. This means that individual symbols are independent by the definition of a random sample (REF). Consequently, signals that exhibit clear correlations between symbols are not accurately presented. By definition of mutual information $H(Y|X) \leq H(Y)$ with equality achieved only if they are independent, i.e. $I(X;Y) = 0$. 
 
-Image pixels are not typically independent, as the light measurements they represent are highly dependent on the scene in which it was taken. A pessimistic view is that none of the pixels are completely independent of each other. In this case, the entropy of an image $I$ 
+%Image pixels are not typically independent, as the light measurements they represent are highly dependent on the scene in which it was taken. A pessimistic view is that none of the pixels are completely independent of each other. In this case, the entropy of an image $I$ 
 
-I therefore proposal a general notion of creating a transformation of $I$ such that its individual symbols become independent. 
+%I therefore proposal a general notion of creating a transformation of $I$ such that its individual symbols become independent. 
 
-The image gradient, denoted $\nabla I$ ...
+%The image gradient, denoted $\nabla I$ ...
 
-Gabor wavelet filters 
+%Gabor wavelet filters 
 
-In order to calculate the mutual information between the original and filtered images, it is necessary to create their joint distribution as well. Since both the gradient and frequency response distributions are two-dimensional, the joint distribution is four-dimensional
+%In order to calculate the mutual information between the original and filtered images, it is necessary to create their joint distribution as well. Since both the gradient and frequency response distributions are two-dimensional, the joint distribution is four-dimensional
 
-\begin{multline}
-    P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) = \sum_m\sum_n \delta_{i, f_x(m, n)}\delta_{i, f_y(m, n)}\delta_{i, \hat{f}_{\hat{x}}(m, n)}\delta_{i, \hat{f}_{\hat{y}}(m, n)}
-\end{multline}
+%\begin{multline}
+%    P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) = \sum_m\sum_n \delta_{i, f_x(m, n)}\delta_{i, f_y(m, n)}\delta_{i, \hat{f}_{\hat{x}}(m, n)}\delta_{i, \hat{f}_{\hat{y}}(m, n)}
+%\end{multline}
 
-The rather cumbersome expression for the mutual information is
-\begin{multline}
-    I(f, \hat{f}) = \sum P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) \log \frac{P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y})}{P_{f_x, f_y}(x, y)P_{\hat{f}_x, \hat{f}_y}(\hat{x}, \hat{y})}
-\end{multline}
+%The rather cumbersome expression for the mutual information is
+%\begin{multline}
+%    I(f, \hat{f}) = \sum P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y}) \log \frac{P_{f_x, f_y, \hat{f}_x, \hat{f}_y}(x, y, \hat{x}, \hat{y})}{P_{f_x, f_y}(x, y)P_{\hat{f}_x, \hat{f}_y}(\hat{x}, \hat{y})}
+%\end{multline}
 
 %Clearly, photographs are an example of signals where each symbol is highly dependent on the others because they represent measurements of light which is dependent on the physical location. ...
 
 %This is not a property of the image format itself, perfectly random and independent pixel values can easily be created synthetically, but of the physical world. Images are nothing more than a series of measurements of light intensity. The light intensity however, is dependent on the objects and materials that has emitted or affected it. Since physical objects 
 
-\begin{equation}
-    H(X, Y) = 
-\end{equation}
+%\begin{equation}
+%    H(X, Y) = 
+%\end{equation}
 
 
 

@@ -34,54 +34,56 @@ where $k$ is the kernel size and $L$ is the number of layers.
 
 The gradient-based entropy measures are an ideal candidate for measuring the degree of obfuscation in an image since it is differentiable. Alternatively, neural-network based iris recognition models may be used \parencite{nguyen2017iris, gangwar2016deepirisnet} but they introduce method-specific biases that may or may not be acceptable. Additionally, the measures presented in the article are shown to correlate highly with the iris recognition accuracy.
 
-Redefining the measures as differentiable functions require a histogram binning method that is continuous. A method proposed in \parencite{avi2019hue} is extended to be usable for multivariate distributions. The traditional histogram counting function is defined as
-\begin{align}
-	h(v) = \sum_{x\in I} \delta_{I_x, v},
-\end{align}
-which is not continuous. Instead, a function based on...
-
-\begin{align}
-    \Pi_k(z) = \sigma(\frac{z-\mu_k+L/2}{W}) - \sigma(\frac{z-\mu_k-L/2}{W})
-\end{align}
-
-\begin{align}
-    P_I(k) = \frac{1}{N}\sum_{x\in\Omega}\Pi_k(I(x))
-\end{align}
-
-\begin{align}
-    P_{\nabla I}(\partial x, \partial y) = \frac{1}{N}\sum_{x\in\Omega}\Pi_{\partial x}(I(x))\Pi_{\partial y}(I(x)) = \frac{1}{N}P_{\partial x}P_{\partial y}^T
-\end{align}
-
-\begin{align}
-    P_{\nabla I_1, \nabla I_2}(\partial x_1, \partial y_1, \partial x_2, \partial y_2) = \frac{1}{N}\sum_{x\in\Omega}\Pi_{\partial x_1}(I(x))\Pi_{\partial y_1}(I(x))\Pi_{\partial x_2}(I(x))\Pi_{\partial y_2}(I(x))
-\end{align}
-
-\begin{align}
-    J(\nabla I_1, \nabla I_2) = \frac{1}{N}P_1P_2^TP_3P_4^T
-\end{align}
-
-\begin{figure}
-    \centering
-    \begin{tikzpicture}
-    \begin{axis}
-    \addplot[
-        samples=100
-    ]
-    {1/(1+exp(-x)};
-    \end{axis}
-    \end{tikzpicture}
-    \caption{Caption}
-    \label{fig:my_label}
-\end{figure}
-
-
-\begin{align}
-    J(\theta) = \frac{1}{2}\mathbb{E}_{x,y\sim \hat{p}_{data}} ||\mathbf{y}-f(x;\theta)||^2
-\end{align}
-
-\begin{align}
-    Z_{i,j,k} = \sum_{l,m,n} V_{l,j+m-1, k+n-1}K_{i,l,m,n}
-\end{align}
+%Redefining the measures as differentiable functions require a histogram binning method that is continuous. A method proposed in \parencite{avi2019hue} is extended to be usable for multivariate distributions. 
+%
+%The traditional histogram counting function is defined as
+%\begin{align}
+%	h(v) = \sum_{x\in I} \delta_{I_x, v},
+%\end{align}
+%which is not continuous. Instead, the counting function is substituted with 
+%
+%\begin{align}
+%    \Pi_k(z) = \sigma(\frac{z-\mu_k+L/2}{W}) - \sigma(\frac{z-\mu_k-L/2}{W})
+%\end{align}
+%
+%\begin{align}
+%    P_I(k) = \frac{1}{N}\sum_{x\in\Omega}\Pi_k(I(x))
+%\end{align}
+%
+%\begin{align}
+%    P_{\nabla I}(\partial x, \partial y) = \frac{1}{N}\sum_{x\in\Omega}\Pi_{\partial x}(I(x))\Pi_{\partial y}(I(x)) = \frac{1}{N}P_{\partial x}P_{\partial y}^T
+%\end{align}
+%
+%\begin{align}
+%    P_{\nabla I_1, \nabla I_2}(\partial x_1, \partial y_1, \partial x_2, \partial y_2) = \frac{1}{N}\sum_{x\in\Omega}\Pi_{\partial x_1}(I(x))\Pi_{\partial y_1}(I(x))\Pi_{\partial x_2}(I(x))\Pi_{\partial y_2}(I(x))
+%\end{align}
+%
+%\begin{align}
+%    J(\nabla I_1, \nabla I_2) = \frac{1}{N}P_1P_2^TP_3P_4^T
+%\end{align}
+%
+%\begin{figure}
+%    \centering
+%    \begin{tikzpicture}
+%    \begin{axis}
+%    \addplot[
+%        samples=100
+%    ]
+%    {1/(1+exp(-x)};
+%    \end{axis}
+%    \end{tikzpicture}
+%    \caption{Caption}
+%    \label{fig:my_label}
+%\end{figure}
+%
+%
+%\begin{align}
+%    J(\theta) = \frac{1}{2}\mathbb{E}_{x,y\sim \hat{p}_{data}} ||\mathbf{y}-f(x;\theta)||^2
+%\end{align}
+%
+%\begin{align}
+%    Z_{i,j,k} = \sum_{l,m,n} V_{l,j+m-1, k+n-1}K_{i,l,m,n}
+%\end{align}
 
 
 \todo{kun hvis du kan nå det!!}
