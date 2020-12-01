@@ -4,14 +4,6 @@ This chapter introduces a model for understanding and working with eye informati
 The experimental work conducted as part of this thesis is centred around iris obfuscation. Iris obfuscation is interesting because iris recognition is well-studied and highly accurate. The model presented here is created for general use in obfuscation but is inspired by the experimental work performed as part of this thesis.
 
 \section{Eye information processing systems}
-\begin{figure}
-	\centering
-	\includegraphics[width=1\textwidth]{figures/model/eye-tracking-model}
-	\caption{Model overview}\label{fig:eye-tracking-model}
-\end{figure}
-
-
-
 An EIP system is the term used in this thesis to denote a generalisation of eye-tracking systems that includes any hardware/software system that decodes human properties using the eye as a source. 
 
 \begin{definition}[Eye information processing (EIP)]
@@ -33,65 +25,38 @@ Finally, the eye-detection, gaze-estimation, iris code generation, and all other
 
 \section{Formal model}
 \begin{figure}
-    \centering
-    \begin{tikzpicture}[node distance=1.3cm]
-        \node (q1) [] {$Q_1$};
-        \node (qd) [right of=q1] {$\dots$};
-        \node (qn) [right of=qd] {$Q_n$};
-        \node (t1) [align=right, left of=q1] {(1)};
-        
-        %\node (e1) [rect, below of=q1] {$f_e^{(1)}$};
-        %\node (ed) [right of=e1] {$\dots$};
-        %\node (en) [rect, right of=ed] {$f_e^{(n)}$};
-        %\node (t2) [align=right, left of=e1] {(2)};
-        
-        
-        %\draw [arrow] (q1) -- (e1);
-        %\draw [arrow] (qn) -- (en);
-        
-        \node (c) [rect, below of=qd] {$f_e$};
-        \node (t3) [align=right, below of=t1] {(3)};
-        \draw [arrow] (q1) -- (c);
-        \draw [arrow] (qn) -- (c);
-        
-        \node (f1) [rect, below of=c] {$f_p$};
-        \node (fd) [below of=f1] {$\dots$};
-        \node (fn) [rect, below of=fd] {$f_n$};
-        \draw [arrow] (c) -- node[anchor=east] {I} (f1);
-        \draw [arrow] (f1) -- (fd);
-        \draw [arrow] (fd) -- (fn);
-        
-        \node (t4) [align=right, below of=t3] {(4)};
-        
-        \node (dd) [below of=fn] {$\dots$};
-        \node (d1) [rect, left of=dd] {$f_d^{(1)}$};
-        \node (dn) [rect, right of=dd] {$f_d^{(n)}$};
-        \node (t5) [align=right, left of= d1] {(5)};
-        
-        \draw [arrow] (fn) -- node[anchor=south east] {$I^*$} (d1);
-        \draw [arrow] (fn) -- node[anchor=south west] {$I^*$} (dn);
-        
-        \node (r1) [below of=d1] {$R_1$};
-        \node (rd) [right of=r1] {$\dots$};
-        \node (rn) [right of=rd] {$R_n$};
-        
-        \draw [arrow] (d1) -- (r1);
-        \draw [arrow] (dn) -- (rn);
-    \end{tikzpicture}
+\centering
+\begin{tikzpicture}[node distance=1.5cm]
+    	\node (qg) [circ] {$Q^{gaze}$};
+    	\node (inv) [right of=qg] {};
+    	\node (qi) [circ, right of=inv] {$Q^{iris}$};
+    	
+    	\node (ce) [circ, below of=inv] {$I$};
+    	\node (co) [circ, below of=ce] {$I^*$};
+    	
+    	\node (binv) [below of=co] {};
+    	\node (qbg) [circ, left of=binv] {$\bar{Q}^{gaze}$};
+    	\node (qbi) [circ, right of=binv] {$\bar{Q}^{iris}$};
+    	
+    	\draw [arrow] (qg) -- node[anchor=south west] {$f_{enc}$} (ce);
+    	\draw [arrow] (qi) -- (ce);
+    	\draw [arrow] (ce) -- node[anchor=east] {$f_{obf}$} (co);
+    	\draw [arrow] (co) -- node[anchor=south east] {$f_{gaze}$} (qbg);
+    	\draw [arrow] (co) -- node[anchor=south west] {$f_{iris}$}(qbi);
+\end{tikzpicture}
     
-    \caption{Eye information processing model: (1) Input properties. (2) Functions that encode the physical manifestation and uncertainties of the source properties. (3) Image capturing process. (4) Image processing steps which may typically be described as a single function. (5) Decoding functions that aim to extract original properties, e.g. an iris pattern or gaze direction.}
-    \label{fig:model}
+\caption{EIP model for iris obfuscation. $Q^{gaze}$, $Q^{iris}$ are the signals of interest encoded and captured through $f_{enc}$ in the image signal $I$. The obfuscation function $f_{obf}$ produces a modified signal $I^*$ which is then decoded by a gaze estimation system $f_{gaze}$ and an iris code generator $f_{iris}$.}
+\label{fig:model}
 \end{figure}
-
 
 %We define a model that allows easy analysis from both a signal-processing centric and probability centric view. 
 This section describes a graphical model that incorporates the concept of understanding EIP as communication and presents analyses of gaze-estimation, iris-recognition, and gaze property extraction using the model.
 
 %An eye information processing system is defined by a connected, directed acyclic graph with vertices $V=\{\mathcal{E}, \mathcal{C}, \mathcal{D}\}$ describing random variables structured as a set of encoding processes $\mathcal{E}_1, \dots, \mathcal{E}_e^n$ and a set of decoding processes $\mathcal{D}_1, \dots, \mathcal{D}_n$ connected by a single common channel $\mathcal{C}$. Edges $E$ denote a conditional dependencies between two variables. Encoding processes may only be connected to each other or the common channel $\mathcal{C}$ which may be connected to any decoders. An EIPS is thus a form of Bayesian Network (REF).
 
-An eye information processing system is defined by a connected, directed acyclic graph with vertices $V=\{Q, \bar{Q}, \mathcal{C}\}$ where $Q$, $\bar{Q}$ are sets of input properties and decoded properties respectively, and $\mathcal{C}$ is a set of random variables representing random processes or communication channels. All $Q$s have in-degree zero  while $\bar{Q}$s have out-degree zero and both sets may only be connected to $\mathcal{C}_i \in \mathcal{C}$. Edges $E$ denote a conditional dependencies between two variables. Thus, an EIP model is a form of Bayesian Network.
+An eye information processing system is defined by a connected, directed acyclic graph with vertices $V=\{\mathcal{Q}, \bar{\mathcal{Q}}, \mathcal{C}\}$ where $\mathcal{Q}$, $\bar{\mathcal{Q}}$ are sets of input properties and decoded properties respectively, and $\mathcal{C}$ is a set of random variables representing random processes or communication channels. All $Q^1, \dots, Q^n \in \mathcal{Q}$ have in-degree zero  while $\bar{Q}^1, \dots, \bar{Q}^n \in \bar{\mathcal{Q}}$s have out-degree zero and both sets may only be connected to $\mathcal{C}_i \in \mathcal{C}$. Edges $E$ denote a conditional dependencies between two variables. Thus, an EIP model is a form of Bayesian Network.
 
-This definition is intentionally broad to allow use in a wide range of situations. However, we may add that most typical system have at least one channel $\mathcal{c}$ which is common to all signals, i.e. it is a bridge in the graph. This is true of all the systems considered in this thesis as they are all based on a single camera pipeline as shown in \cref{fig:eye-tracking-model}.
+This definition is intentionally broad to allow use in a wide range of situations. However, we may add that most typical system have at least one channel which is common to all signals, i.e. it is a bridge in the graph. This is true of all the systems considered in this thesis as they are all based on a single camera pipeline as shown in \cref{fig:eye-tracking-model}.
 
 
 
