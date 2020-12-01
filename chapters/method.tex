@@ -1,21 +1,16 @@
 \chapter{Method details}
 This chapter presents additional details on the experimental work performed as part of this thesis. It builds directly on the material presented in the article, which describes only the most relevant and critical details. Additional results and experiments are presented in the next chapter.
 
-The primary contribution of this work in terms of implemented software, is the platform designed and created for the experimental work presented in the article. The platform consists of tools for optimisation, entropy calculations, iris recognition, gaze estimation as well as a platform for defining, running, and analysing iris obfuscation experiments. 
+The primary contribution of this work in terms of implemented software is the platform designed and created for the experimental work presented in the article. The platform consists of tools for optimisation, entropy calculations, iris recognition, gaze estimation as well as a platform for defining, running, and analysing iris obfuscation experiments. 
 
 
 \section{Implementation details}
 This section presents the scope and important details of the software systems implemented for the thesis. One of the goals of the thesis is to create an experimental platform that can easily be extended and adapted for future research.
 
-FIGREF shows a high-level diagram of the provided software. 
-
-T
-
-
 \subsection{Optimisation engine}\label{sec:detail-opt}
 The parameter experiments presented in the article are driven by the optimisation engine component. Its purpose is to allow implementation of a number of different optimisation methods.
 
-The MultiObjectiveOptimizer class expects an Objective and produces a set of results by calling its run method. The run method is implemented differently for each subclass to support different types of optimisation. The NaiveMultiObjectiveOptimizer does not use feedback for determining parameters for the next iteration and instead relies on sampling based parameter selection - this is the class used in the experiments. Additionally, a PopulationMultiObjectiveOptimizer is an implementation of the so called \textit{vector evaluated genetic algorithm} \parencite{kochenderfer2019algorithms}, which uses population strategies to combine and select parameters. The method is discussed in further detail in \cref{sec:future-optim}, where its possible uses for future work is considered.
+The MultiObjectiveOptimizer class expects an Objective and produces a set of results by calling its run method. The run method is implemented differently for each subclass to support different types of optimisation. The NaiveMultiObjectiveOptimizer does not use feedback for determining parameters for the next iteration and instead relies on sampling based parameter selection. This is the class used in the experiments. Additionally, a PopulationMultiObjectiveOptimizer is an implementation of the so called \textit{vector evaluated genetic algorithm} \parencite{kochenderfer2019algorithms}, which uses population strategies to combine and select parameters. The method is discussed in further detail in \cref{sec:future-optim}, where its possible uses for future work is considered.
 
 Each optimiser has exactly one Objective. The abstract Objective class only has a single sub-class ObfuscationObjective for now but additional ones would be necessary for other optimisation methods or other optimisation tasks. The purpose of the Objective class is to calculate a set of Metrics given a set of parameters. In ObfuscationObjective this is done as described in the article by using different datasets for different metrics. 
 
@@ -68,13 +63,13 @@ Six different interactive tools were created, specifically
 	\item [GazeLab] Tool for experimenting with gaze estimation parameters and evaluating performance.
 	\item [ObfuscationLab] Explorative tool for testing the iris obfuscation algorithm and setting up configuration files for large-scale testing. 
 	\item [OptimisationLab] Tool used for running small optimisation experiments and creating configurations for larger ones. 
-	\item [ObfuscationResultsAnalyser] For testing the result of running the iris obfuscation experiment. Only allows simple analyses and was mostly used during development of the iris recognition algorithm to test performance.
-	\item [OptimisationResultsAnalyser] Detailed interactive analysis for the parameter experiments. It has been used primarily to discover interesting facets of the results. Due to the large number of metrics used for analysis, interactive visualisations provide....
+	\item [ObfuscationResultsAnalyser] For testing the result of running the iris obfuscation experiment. It allows simple analyses and was mostly used during development of the iris recognition algorithm to test performance.
+	\item [OptimisationResultsAnalyser] Detailed interactive analysis for the parameter experiments. It has been used primarily to discover interesting facets of the results.
 \end{description}
 
 
 \section{Gaze estimation}
-For this project, I chose to implement my own gaze estimation system. Although previous students at ITU have developed eye tracking software which was available to me, both the system and the hardware was not ideal for this use case either. 
+For this project, I implemented my own gaze estimation system. Although previous students at ITU have developed eye tracking software which was available to me, both the system and the hardware was not ideal for this use case. 
 
 The physical setup is a remote camera that is positioned close to the eye to create circumstances similar to head-mounted eye trackers. Participants are asked to rest their head on a stand which ensures relative stability of the eye's location relative to the camera. A screen is used to show target which are to be predicted by the software. An infrared LED fastened to the screen acts as both a light and for creating a corneal reflection. Details on calibration are left to the article.
 
@@ -85,7 +80,7 @@ For a set of pupil-glint vectors $\{\mathbf{x}^1, \mathbf{x}^2, \dots, \mathbf{x
     \mathbf{y}^i =  \begin{bmatrix}
         \left(x_1^{1}\right)^2 & \left(x_2^{1}\right)^2 & x_1^1x_2^1 x_1^1 & x_2^1 & 1\end{bmatrix} \begin{bmatrix}a^1&a^2\\ b^1&b^2\\ c^1&c^2\\ d^1&d^2\\ e^1&e^2\\ f^1&f^2\end{bmatrix},
 \end{equation}
-where $a$-$e$ are the parameters. A solution could be found using $12$ calibration points, but the method of least squares allows us to minimise the impact of outliers.
+where $a$-$e$ are the parameters. A solution could be found using $12$ calibration points, but the method of least squares is used on all $25$ calibration points in the created dataset to minimise errors from detection noise. 
 
 Several pupil detectors were tested, of which DeepEye \parencite{vera2019deepeye} outperformed the others. Specifically, I tested a home-made BLOB based detector and the ElSE \parencite{fuhl2016else} and ExCuSE \parencite{excuse} detectors as well.
 
@@ -97,12 +92,12 @@ Several pupil detectors were tested, of which DeepEye \parencite{vera2019deepeye
 
 %The iris recognition implementation is an attempt at closely matching the design of the original algorithm created by Daugman (REF) and which is generally still used for baseline comparisons today. In improved versions, Daugman's method acheives accuracies of XX on a non-public dataset. The replica only achieves XX on the CASIA IV dataset though it should be mentioned that this is very favourable compared to other replicas proposed in various studies (REF). Additionally the test dataset, CASIA IV, only contains $2639$ samples from $xx$ subjects which limits the precision of the result.
 
-The iris implementation used in the experiments has been implemented from scratch. There are two reasons for this choice. By far the most important was that no accurate implementation was available with support for Python. The source code for the OSIRIS project \parencite{osiris} has seemingly disappeared and several others including \parencite{rec1, rec2, rec3} did not use the original technique. Secondly, implementing the method from scratch provides valuable experience which is useful when trying to understand how the iris signal is communicated and decoded from its image representation.
+The iris implementation used in the experiments has been implemented from scratch. There are two reasons for this. By far the most important was that no accurate implementation was available with support for Python. The source code for the OSIRIS project \parencite{osiris} is no longer available and several others including \parencite{rec1, rec2, rec3} did not use the original technique. Secondly, implementing the method from scratch provides valuable experience which is useful when trying to understand how the iris signal is communicated and decoded from its image representation.
 
 % A very thorough implementation of multiple iris recognition algorithms are available in a library (REF) but only in c++. Writing a Python interface was outside the scope of this thesis.
 
 
-Daugman's method is based on the use of wavelets to detect the phase of the iris at a number of frequencies and angles. The minimum wavelength chosen for the filters was 3 pixels in order to avoid artefacts affecting the outcome. This minimum is limited by the Nyquist frequency\todo{check this}
+Daugman's method is based on the use of wavelets to detect the phase of the iris at a number of frequencies and angles. The minimum wavelength chosen for the filters was 3 pixels in order to avoid artefacts affecting the outcome. This minimum is limited by the Nyquist frequency.
 
 \begin{figure}
     \begin{subfigure}{0.5\linewidth}
@@ -131,25 +126,30 @@ In other words, the pixel should take on the average value of the underlying pix
 \begin{equation}
     P(S) = \frac{1}{n}\sum_{x \sim U(S)}^n I_{x},
 \end{equation}
-where $U(S)$ is a uniform distribution over $S$. This method works for any size...
+where $U(S)$ is a uniform distribution over $S$. 
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{figures/iris-code-gen.pdf}
-    \caption{Iris code generation process. (1) The annotation (see text) is used to generate a binary mask of the visible parts of the iris. (2) The pupil and iris boundaries are used to create dimensionless polar projections of the iris and mask. (3) Gabor filters are applied to the polar image, quantized, and concatenated to a $16296$-element bit-vector which is the iris code. It is here visualised using black pixels for the value $0$ and white pixels for the value $1$. Pixels masked by the polar mask projection (and excluded from comparisons) are shown in grey (zooming might be necessary). }
+    \caption{Iris code generation process. (1) The annotation is used to generate a binary mask of the visible parts of the iris. (2) The pupil and iris boundaries are used to create dimensionless polar projections of the iris and mask. (3) Gabor filters are applied to the polar image, quantized, and concatenated to a $16296$-element bit-vector which is the iris code. It is here visualised using black pixels for the value $0$ and white pixels for the value $1$. Pixels masked by the polar mask projection (and excluded from comparisons) are shown in grey (might only be visible when magnifying the image). }
     \label{fig:iris-code-gen}
 \end{figure}
 
 \section{Optimisation system}
 Iris obfuscation has at least two objectives, one for the gaze accuracy and one for the iris recognition accuracy. This is problematic for classical optimisation where the goal is to find an extremum of a cost function with $\mathbb{R}$ as its domain. The field of multi-objective optimisation deals with exactly this kind of situation. A possible solution is to define a weighing of each sub-objective, i.e.
-\begin{align}
+\begin{align}\label{eq:weights}
 	J^{\mathcal{O}}(I) = w_{gaze}J_{gaze}^{\mathcal{O}}(I) +  w_{iris}J_{iris}^{\mathcal{O}}(I),
 \end{align}
 as originally suggested by my supervisor in \cite{proposal}. This approach may be suitable when sufficient knowledge about the problem makes it possible to define reasonable values for the weights. It does, however, assume prior knowledge of the relative importance of the objectives. 
 
-Instead, this thesis focuses on exploring the trade-offs between various objectives over a large range of possible parameter values for each obfuscation method. In the article this is done using grid-search due to the relatively limited search space. I also experimented with a population-based method for combining multiple objectives which preserves (something).\todo{what is something?}
+Instead, this thesis focuses on exploring the trade-offs between various objectives over a large range of possible parameter values for each obfuscation method. In the article this is done using grid-search due to the relatively limited search space. %I also experimented with a population-based method for combining multiple objectives which preserves (something).\todo{what is something?}
 
 \subsection{Pareto optimality}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{figures/pareto}
+	\caption{Example of a Pareto frontier of a set of two-dimensional vectors (borrowed from \cite[213]{kochenderfer2019algorithms}).}\label{fig:pareto}
+\end{figure}
 A central idea in using these explorative methods is \textit{pareto optimality}. Pareto optimality is based on the concept that even when objectives are not comparable, it is possible to determine an ordering of the optimality of points. Figure (REF)\todo{figure} shows an example in two dimensions. The points marked in blue are objectively better than any of the black points. Being objectively better here means that it is at least as good in every dimension and better in at least one. This is called dominance - the full definition is shown in \cref{def:dominance}. Points that are not dominated by any other point is \textit{Pareto optimal} (\Cref{def:p-optimal}). The subset of all such points of a given set is called the \textit{Pareto frontier} (\Cref{def:p-frontier}). In this example, the blue points define the Pareto Frontier.
 
 \begin{definition}[Dominance]\label{def:dominance}
@@ -173,19 +173,24 @@ The subset of all Pareto optimal points in a given set.
 \end{definition}
 
 \subsection{In iris obfuscation}
-For iris obfuscation, the Pareto frontier of the gaze metric (\cref{eq:ob_gaze}) and iris code similarity metric (\cref{eq:ob_iris}) defines the boundary between 
+For iris obfuscation, the Pareto frontier of the gaze metric (\cref{eq:ob_gaze}) and iris code similarity metric (\cref{eq:ob_iris}) defines the boundary of parameter candidates that provide optimal trade-offs between either metric.
 
-
-
-The optimisation goal used in the article (\cref{eq:obf-goal}) can be generalised to 
+The optimisation goal used in the article (\cref{eq:obf-goal}) can be redefined as a multiobjective optimisation problem
 \begin{align}
 	\begin{aligned}
-    \max & J_{obf}(I, I^*)\\
-    \min & \frac{J_{gaze}(I)}{J_{gaze}(I^*)},
+    \min & - J_{obf}(I, I^*)\\
+    \min & \frac{J_{gaze}(I)}{J_{gaze}(I^*)}.
 \end{aligned}
 \end{align}
 
-for unconstrained optimisation. This is problematic since there is no relation valuing the relative importance of the two goals
+The Pareto frontier of the set of vectors defined by $(- J_{obf}(I, I^*), \frac{J_{gaze}(I)}{J_{gaze}(I^*)}$ is the solution set to this optimisation problem. Because no constraints have been defined, any point is equally valid as a solution. Defining weights for each objective as suggested in \cref{eq:weights} solves the problem but requires a prior definition of importance. A more holistic strategy is to use methods that estimate the Pareto frontier itself. The method used in this thesis is to test Pareto optimality for a set of sample points. Grid-search is used in my experiments but other sampling strategies can also be used. 
+
+\todo{more?}
+%The optimisation goal (\cref{eq:obf-goal}) used in the experiments is equivalent to fixing one  
+
+
+%To overcome this problem, 
+%for unconstrained optimisation. This is problematic since there is no relation valuing the relative importance of the two goals
 
 \begin{figure}
     \centering
@@ -212,7 +217,7 @@ We approach the analysis of separating the iris signal and the gaze signal from 
 
 \Cref{fig:1dimage} shows an eye image and a one-dimensional slice where the light intensity is graphed as a function of the x-position. Clearly, the portion covering the iris shows relatively chaotic changes but low variance compared to the rest of the image. The pupil-iris boundary and glint-pupil boundary which are used in our gaze-estimation method are clearly identifiable since they are represented as huge changes in intensity. These sorts of examples are typically also shown when introducing image edge detection, since it clearly demonstrates the connection between rate of change, i.e. the gradient, and the presence of an edge. 
 
-When analysing the image as a Fourier series, two important factors stand out. Firstly, the iris seems to be dominated by a low-amplitude, very random signal. This indicates a range of small to medium wavelengths and high entropy. The edge regions, which are used by our gaze algorithm, instead look roughly like square waves. A square wave requires an infinite Fourier series to be represented accurately. Because the image is effectively band-limited, it is possible to recreate it with a finite series but it still spans the whole wavelength spectrum.
+When analysing the image as a Fourier series, two important factors stand out. Firstly, the iris seems to be dominated by a low-amplitude, random signal. This indicates a range of small to medium wavelengths and high entropy. The edge regions, which are used by our gaze algorithm, instead look roughly like square waves. A square wave requires an infinite Fourier series to be represented accurately. Because the image is effectively band-limited, it is possible to recreate it with a finite series but it still spans the whole wavelength spectrum.
 
 This signal analysis becomes important when considering methods for obfuscation. Our understanding of how the transformations affect different simpler signals may help us find suitable methods that are more well-suited to the application.
 

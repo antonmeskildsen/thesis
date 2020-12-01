@@ -95,14 +95,14 @@ This definition is intentionally broad to allow use in a wide range of situation
 
 
 
-\section{A generalisable goal for eye information processing}\todo{Introduktion / revider flow}
+\section{A generalisable goal for eye information processing}\label{sec:gen-goals}
 With the necessary definitions in place, we now define how any eye information process in terms of a general goal with respect to preservation of information in the system. Given an arbitrary input property $Q$, an EIPS can be defined as a system that seeks to minimise conditional information $H(\bar{Q}|Q)$ and maximise mutual information $\mathcal{I}(Q;\bar{Q})$ between the input property/signal and the decoded version. This definition is intuitively true for any estimator or system aiming to estimate some property but is especially useful in the case of understanding eye information security due to the precise definitions of information content described by these measures.
 
 In obfuscation, the goal is modified to include an optimisation for selective degradation of sensitive properties. This is achieved through the reverse operation, i.e. maximising the noise $H(\bar{Q^{obf}}|Q^{obf})$ and minimising the actual information throughput $\mathcal{I}(Q^{obf};\bar{Q}^{obf})$ for some property $Q^{obf}$. 
 
-The goal of any eye processing system is exactly to maximise mutual information and minimise conditional information between the decoded and original signals. This will be shown for both gaze estimation and iris recognition in (SECTION REF). For iris obfuscation, the goals compete, i.e. $I(\bar{Q}^{gaze};Q^{gaze})$ and $H(\bar{Q}^{iris}|Q^{iris})$ should be maximised while $H(\bar{Q}^{gaze}|Q^{gaze})$ and $I(\bar{Q}^{iris}|Q^{iris})$ should be minimised. This is problematic because the signals are both encoded in $I$ which is the signal we have to modify. 
+The goal of any eye processing system is therefore to maximise mutual information and minimise conditional information between the decoded and original signals. This will be shown for both gaze estimation and iris recognition in the following. For iris obfuscation, the goals compete, i.e. $I(\bar{Q}^{gaze};Q^{gaze})$ and $H(\bar{Q}^{iris}|Q^{iris})$ should be maximised while $H(\bar{Q}^{gaze}|Q^{gaze})$ and $I(\bar{Q}^{iris}|Q^{iris})$ should be minimised. This is problematic because the signals are both encoded in $I$ which is the signal we have to modify. 
 
-The link between these information metrics and optimality for a specific application is found in the definition for how entropy, and thereby uncertainty in a signal, is related to them. \Cref{eq:entropy-law} describes this relation exactly. \todo{link til theorem}
+The link between these information metrics and optimality for a specific application is found in the definition for how entropy, and thereby uncertainty in a signal, is related to them. \Cref{eq:entropy-law} describes this relation.
 
 \begin{theorem}
     For random variables $\bar{Q}$, $Q$ where $R=f(Q)$, then $f$ is a deterministic function if and only if $H(\bar{Q}|Q)=0$.
@@ -126,7 +126,7 @@ Maximising information involves the same problem in the opposite direction. Sinc
 \paragraph{A note on properties vs. signals}
 The properties used in EIP systems may themselves be defined as signals and can thus be represented by random variables. This is evidently true if we consider gaze or even identity. Gaze changes over time in response to internal and external inputs, giving rise to random measurements at specific points in time. Identity depends on the subject captured and is this randomly determined by external factors. In this thesis, the general view is that of properties being random themselves but the analyses may look at only a single datapoint. For example, the image analysis portion accepts single images as representative of the entire distribution of identities even though this is not technically accurate. It is, however, practical as a measure of simplification in the actual experimental design. Its impact will be discussed when relevant.
 
-\subsection{Iris recognition}\todo{Kig på muligheder med afsnittet}
+\subsection{Iris recognition}\label{sec:iris-goal}
 Using the definition of an eye information system, iris recognition can be defined as the task of determining the probability of two iris codes $\bar{Q}^a$ and $\bar{Q}^b$ originating from the same source signals $Q^a = Q^b$ or different source signals $Q^a\neq Q^b$. Iris code is here used as a general term to cover any signal used for iris comparison. The probabilities are defined as $P(Q^a\neq Q^b|\bar{Q}^a, \bar{Q}^b)$, $P(Q^a\neq Q^b|\bar{Q}^a, \bar{Q}^b)$ and are determined by the comparison algorithm used. These are typically inferred by creating a distance metric $S = h(\bar{Q}^a, \bar{Q}^b)$ which is used for estimating the proxy distributions $P(S|Q^a\neq Q^b)$ or $P(S|Q^a\neq Q^b)$. In the most traditional case, iris recognition acceptance is performed by failing a statistical test of significance, i.e. determining that $P(S|Q^a\neq Q^b)$ is extremely unlikely. This was first proposed in \cite{DAUGMAN_IRIS_ORIG} and can be reformulated as
 \begin{align}
 \begin{aligned}
@@ -150,10 +150,8 @@ In other words, iris recognition systems are limited by their ability to transmi
 
 The optimisation of iris recognition in terms of decoding is defined by the method used. Of the possible approaches described in (SECREF), they all focus on eliminating the influence of unrelated information which may be viewed as noise as well as maximising the ability of the method to capture enough detail to differentiate between large populations. 
 
-\paragraph{Gaze estimation}
-%Gaze is defined as either the direction or point of visual attention of a given subject. This property is by definition at least partially subjective, as the point of attention does not always coincide with the fovea, but instead is at least partially controllable by the subject (REF). The physical encoding of gaze is then, at least when only observing the eye's immediate position and orientation, inherently probabilistic. This is captured by the model as the distribution $P(\hat{Q}|Q_{gaze})$, if the encoding function is split between physical encoding and image capture such that $I=f_{capture}(\hat{Q})$ and $\hat{Q}=f_{physical}(Q_{gaze}, \dots)$. 
+\subsection{Gaze estimation}\label{sec:gaze-goal}
 
-%Each additional step in a given gaze estimation system introduces some amount of additional noise given by its imperfections. Robust gaze estimation can therefore be defined as transformations and decoders that have low noise-rates for large variations in signal distributions. Consequently, a non-robust system is characterised by having low noise-rates only for a narrow subset of input signals. 
 
 The definition of an ideal gaze estimation system is one that minimises the conditional information $H(\bar{Q}^{gaze}|Q^{gaze})$ while maximising the entropy $H(\bar{Q}^{gaze})$. We differentiate between a gaze signal $Q^{gaze}$ and an individual gaze point $Q^{gaze}_i$. we may add that the capacity of the system should be $C = \max H(\bar{Q}^{gaze})$, i.e. the capacity should be equal to the maximum entropy of the gaze signal. For example, if the gaze is described as two $16$-bit integers, the capacity should be $32$ bits. 
  
