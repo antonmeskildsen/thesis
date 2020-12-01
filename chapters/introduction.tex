@@ -1,67 +1,60 @@
 \chapter{Introduction}
 This thesis concerns the discovery, classification, and removal of sensitive information in eye tracking. In this context, sensitive information is a catch-all that includes any property that is considered personal, whether by law or by social or ethical standards. This problem area has only recently gained interest in the research community and relative few studies exist on the subject \parencite{BRENDAN_ARTICLE, BRENDAN_SNOW, differential-general, differential-general-two, privaceye}, despite a growing concern for how this data might be extracted and used in a world where eye-tracking is becoming increasingly pervasive. 
 
-The human eye can be used to reveal a multitude of sensitive properties about its owner, including identity, gaze, psychological disorders and emotional state. Using a real-world object such as the eye requires detection through a sensor system which produces unstructured and highly information-dense signals that are comparatively hard to quantify as being either sensitive or not. This is concerning because actual data produced by eye-trackers might contain sensitive information without it being apparent to the producer of the system, the consumer/user, or both. However, it is highly likely that data from head-mounted eye-trackers contains several sensitive properties since a large body of studies have demonstrated this possibility using eye-tracking systems.
+The human eye can be used to reveal a multitude of sensitive properties about its owner, including identity, gaze, psychological disorders and emotional state. Detecting a real-world object such as the eye requires a sensor system which produces unstructured and highly information-dense signals that are comparatively hard to quantify as being either sensitive or not. This is concerning because actual data produced by eye-trackers might contain sensitive information without it being apparent to the producer of the system, the consumer, user, or both.
 
-This difficulty defining the severity of the problem is followed by another question: how can potentially sensitive information be removed? This is not a simple task since the information is encoded in a single signal, an image (or images), which, in eye-trackers, are obviously necessary for the system to function. In other words, information removal needs to be selective. It is therefore necessary to accurately identify the mechanisms which govern the intertwining of different information sources in order to be able to understand how one source may be removed with minimal interference to others that are needed for a certain application.
+The challenge of defining the severity of the problem is followed by another question: how can potentially sensitive information be removed? This is not a simple task since the information is encoded in a single signal, an image (or images), which, in eye-trackers, are necessary for the system to function. The ability for an eye-tracker to perform its task is called \emph{utility}. In other words, information removal needs to be selective. It is therefore necessary to accurately identify the mechanisms which govern the intertwining of different information sources in order to be able to understand how one source may be removed with minimal interference to others that are needed for a certain application.
 
-A possible direction, which has been studied to some extent in the eye-tracking research community (REF), is centred around securing endpoints, i.e. mediating access to the data either directly through encryption or indirectly through aggregation and randomisation hiding individual contributions (REF). However, this is not enough when considering large-scale consumer products with integrated eye-trackers or sharing datasets and results from research. With consumer products, the manufacturer is left with full responsibility of securing potential data and may themselves use the sensitive information for a number of purposes. For datasets containing publicly available data from individuals, the sensitive information may infringe on local regulations and laws (REF GDPR). In all instances, retaining sensitive information is a burden on the security and ethical integrity of the data holders. Removing the sensitive information from the images and gaze signals themselves is therefore the only solution that makes the data safe for general use.
+A possible direction, which has been studied to some extent in the eye-tracking research community, is centred around securing endpoints, i.e. mediating access to the data either directly through encryption or indirectly through aggregation and randomisation hiding individual contributions \parencite{differential-general, differential-general-two}. However, this is not enough when considering large-scale consumer products with integrated eye-trackers or sharing datasets and results from research. With consumer products, the manufacturer is left with full responsibility of securing potential data and may themselves use the sensitive information for a number of purposes. For datasets containing publicly available data from individuals, the sensitive information may infringe on local regulations and laws \parencite{eu-gdpr}. In all instances, retaining sensitive information is a burden on the security and ethical integrity of the data holders. Removing the sensitive information from the images and gaze signals themselves is therefore the only solution that makes the data safe for general use.
 
-The term used to describe this particular kind of information removal in this thesis is \emph{obfuscation}. It is an appropriate term because it involves modifications that make retrieval of sensitive properties harder without impacting application performance beyond an acceptable threshold. It also implies that the security it provides is probabilistic which is important when evaluating a given method.
-
-%\todo{continue from here}
- %detected through a sensor-system in this manner produces unstructured and highly information-dense signals that are 
-
-%The purpose of the thesis is to start a scientifically based discussion of the nature of sensitive information in eye tracking and how eye tracking systems can be modelled in a manner that allows 
-
-%its incorporation and thus provide a common reference frame for understanding how methods for information extraction and removal compare. I will focus on iris recognition as a case because it is prevalen.....
-
-%Iris recognition will be used for in-depth experimental analysis due to its prevalence and high precision. 
-
-
-%This sensitive information is not isolated as is the case with, for example, one's social security number, but is instead a component of the data sources used in eye tracking, including eye images and gaze signals.
-
-
-%The isolation and removal of sensitive information in eye tracking is problematic because it is extracted from the same data sources used in eye tracking processes. An eye tracker consists of a capturing system, a gaze estimator, and optionally some analysis component. 
-%the extent to which sensitive information is present in eye tracking data and how eye tracking systems can be modelled in a manner that allows incorporation of security factors.
-
-
-
-%or is deemed by law or regulation to be 
-
-%* detailed analysis of iris obfuscation
-%%* detailed analysis of filters on images
-% * better results
-% * critical issues discovered
-% * generalisable model proposed
-
-
-% Today's digital world has enabled information sharing on a scale few would have imagined even just a few decades ago. This 
-
-%\subsection{Background}
-%Today's digital world has enabled information sharing on a scale few would have imagined even just a few decades ago. This has lead to increasing concerns over the ethical and legal use of information that may in some way either enable identification of individuals or enable discovery of specific traits of individuals. Concrete details like social security numbers, medical histories, and home addresses, are clearly sensitive to some degree, either by legal rights to privacy as ... by many countries.. However, some properties may indirectly be inferred, e.g. through gaze data. 
-
-%If a sensitive information is not used, it is a liability, both ethically and legally. In essence, it is preferable for a data owner to minimise their amount of sensitive information since it minimises the impact of data leakage and data sharing. 
-
-%For eye-tracking data, these last points are especially important. In research, both results from gaze analysis and source eye images are frequently published to allow reproduction and further analysis. Consumer products frequently collect user data for internal analysis and product improvement. In both cases, obfuscation methods would decrease the risks and complexity involved with handling the data.
-
-%From an ethical perspective, the extent to which these analyses are possible is not well known in the public. Even in the eye-tracking research community, there is relatively little data on 
-
-
-%\subsection{State of the art}
+The term \emph{obfuscation} is used in this thesis to describe this particular kind of selective information removal. It is an appropriate term because it involves modifications that make retrieval of sensitive properties harder without impacting utility.  application performance beyond an acceptable threshold. It also implies that the security it provides is probabilistic which is important when evaluating a given method.
 
 \subsection{Problem definition}
-
-
 \begin{quotation}
-How can sensitive information be removed from eye-tracking processes and data while retaining utility for eye-tracking applications?
+\emph{How can sensitive information be removed from eye-tracking processes and data while retaining utility for eye-tracking applications?}
 \end{quotation}
 
-This problem statement leads naturally to three sub-questions: (1) what constitutes sensitive information in eye tracking and how can it be quantified/modelled, (2) how can this information be removed or obscured to make personal identification impossible without destroying information relevant to eye tracking, and (3), how can utility and security be defined in measurable terms that cover general eye-tracking processes? The goal to gain insight into how this problem can be defined in a manner that is logically valid and scientifically measurable. This will make it possible to reason about and optimise the performance of proposed methods for removing sensitive information. 
+This problem statement leads to three sub-questions: (1) what constitutes sensitive information in eye tracking and how can it be quantified/modelled, (2) how can this information be removed or obscured to make personal identification impossible without destroying information relevant to eye tracking, and (3), how can security be defined in measurable terms that cover general eye-tracking processes? The goal is to gain insight into how this problem can be defined in a manner that is logically valid and scientifically measurable. This will make it possible to reason about and optimise the performance of proposed methods for removing sensitive information. 
 
-This thesis is an initial suggestion for how these questions may be answered as well as detailed experimental evidence supporting the proposed model and methodology's use in obfuscation of iris patterns.
 
-\subsection{Method}
-The thesis is constructed around the central piece of research which is presented in the article \emph{My article name} in (REF). The article concerns iris pattern obfuscation and presents multiple methods that improve obfuscation effectiveness. Additionally, the article presents the eye information model and uses it as a device to propose the improved obfuscation methods. The article presents the first comprehensive analysis of iris obfuscation and therefore the first actual overview of how effective this approach to prevention of identification is.
+This thesis proposes the term \emph{eye information processing} (EIP) as a generalisation of eye-tracking that covers any sequence of processes that decodes human properties using the eye as a source. 
+%This thesis is an initial suggestion for how these questions may be answered as well as detailed experimental evidence supporting the proposed model and methodology's use in obfuscation of iris patterns.
+
+
+The contributions of this thesis are: (1) A generic EIP model for understanding EIPs and how different signals, that may or may not be considered sensitive in a given situation, are intertwined. (2) A proposal for security measurements based on the concept of entropy which allows obfuscation to be defined and evaluated abstractly. (3) The first comprehensive overview of obfuscation methods for iris patterns with several new methods proposed based on the presented model and methodology. The proposed methods perform significantly better than existing approaches. The proposed evaluation methods show that the proposed EIP model measure has a correlation of $0.91$ with a measure derived from an actual iris recognition algorithm.
+
+\subsection*{Method}
+A central piece of this thesis is a study on obfuscation of iris patterns. Iris obfuscation is used as the main method of developing an understanding of how the obfuscation problem might be modelled in a manner that makes it possible to reason about possible implementations and evaluate them. The study is presented in an article in \cref{ch:article}. 
 
 The article is prepended by a more in-depth treatment of the background material as well as a more generalised presentation of the eye information model with examples of how it can be applied to other analysis problems. The article is followed by additional details on the experimental process and methods and results that were not presented in the article itself. Finally, a section on future developments presents my view on how this research field could evolve and what constitutes interesting paths for future investigations.
+
+%The thesis is constructed around the central piece of research which is presented in the article \emph{My article name} in (REF). The article concerns iris pattern obfuscation and presents multiple methods that improve obfuscation effectiveness. Additionally, the article presents the eye information model and uses it as a device to propose the improved obfuscation methods. The article presents the first comprehensive analysis of iris obfuscation and therefore the first actual overview of how effective this approach to prevention of identification is.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
